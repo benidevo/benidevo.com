@@ -15,24 +15,14 @@ func SetupRoutes() *gin.Engine {
 	router := gin.Default()
 	router.Use(globalErrorHandler)
 
-	// Load HTML templates
 	router.LoadHTMLGlob("web/templates/**/*.html")
-
-	// Serve static files
 	router.Static("/static", "./web/static")
 
-	// Initialize services
-	projectService := services.NewProjectService(nil) // No GitHub service needed
+	projectService := services.NewProjectService(nil)
 
-	// Load project data
-	projectService.LoadProjects()
-
-	// Initialize handlers
 	homeHandler := handlers.NewHomeHandler(projectService)
 
-	// Routes
 	router.GET("/", homeHandler.HomePage)
-	router.GET("/projects/:id/details", homeHandler.ProjectDetails)
 
 	// Health check
 	router.GET("/health", func(c *gin.Context) {

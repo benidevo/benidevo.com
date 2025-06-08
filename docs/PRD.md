@@ -189,7 +189,7 @@ portfolio-content/
 **Hero Section**:
 
 - Professional headshot (Yes - builds trust and personal connection)
-- Clear value proposition: "Backend Engineer specializing in Distributed Systems"
+- Clear value proposition: "Software Engineer specializing in Distributed Systems"
 - Location: Berlin, Germany
 - Subtle particles.js animation (dark blue dots, slow movement)
 

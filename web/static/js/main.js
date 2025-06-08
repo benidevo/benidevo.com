@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (document.getElementById('particles-js')) {
     particlesJS('particles-js', particlesConfig);
   }
-  
+
   // Smooth scroll for anchor links
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
-  
+
   // Animation on scroll (simple intersection observer)
   const observeElements = document.querySelectorAll('.animate-slide-up, .animate-fade-in');
   const observer = new IntersectionObserver((entries) => {
@@ -138,9 +138,8 @@ document.addEventListener('DOMContentLoaded', function() {
   }, {
     threshold: 0.1
   });
-  
+
   observeElements.forEach(el => {
-    // Set initial state
     el.style.opacity = '0';
     el.style.transform = 'translateY(20px)';
     el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
@@ -150,14 +149,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // HTMX event handlers for enhanced interactivity
 document.addEventListener('htmx:afterRequest', function(event) {
-  // Handle project details expansion
   if (event.target.id && event.target.id.startsWith('project-details-')) {
     const detailsEl = event.target;
     if (detailsEl.innerHTML.trim()) {
       detailsEl.classList.remove('hidden');
       detailsEl.style.opacity = '0';
       detailsEl.style.transform = 'translateY(-10px)';
-      
+
       // Animate in
       requestAnimationFrame(() => {
         detailsEl.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out';
@@ -174,7 +172,7 @@ function updateThemeColors(colors) {
   Object.entries(colors).forEach(([key, value]) => {
     root.style.setProperty(`--color-${key}`, value);
   });
-  
+
   // Update particles color if they exist
   if (window.pJSDom && window.pJSDom[0] && window.pJSDom[0].pJS) {
     window.pJSDom[0].pJS.particles.color.value = colors.secondary || '#3B82F6';
@@ -182,8 +180,52 @@ function updateThemeColors(colors) {
   }
 }
 
+// Theme toggle functionality
+function toggleTheme() {
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+  if (newTheme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+
+  localStorage.setItem('theme', newTheme);
+
+  updateParticlesTheme(newTheme);
+}
+
+function updateParticlesTheme(theme) {
+  if (window.pJSDom && window.pJSDom[0] && window.pJSDom[0].pJS) {
+    const color = theme === 'light' ? '#3B82F6' : '#60A5FA';
+    window.pJSDom[0].pJS.particles.color.value = color;
+    window.pJSDom[0].pJS.particles.line_linked.color = color;
+  }
+}
+
+// Initialize theme on page load
+function initializeTheme() {
+  const savedTheme = localStorage.getItem('theme');
+
+  const themeToApply = savedTheme || 'dark';
+
+  if (themeToApply === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+
+  updateParticlesTheme(themeToApply);
+}
+
+initializeTheme();
+
 // Export for global access
 window.portfolioUtils = {
   updateThemeColors,
   particlesConfig
 };
+
+// Make theme toggle globally available
+window.toggleTheme = toggleTheme;

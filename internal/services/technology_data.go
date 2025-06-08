@@ -40,7 +40,15 @@ func getTechnologyData() map[string]models.Technology {
 		},
 		"FastAPI": {
 			Name: "FastAPI",
-			Icon: "https://fastapi.tiangolo.com/img/icon-white.svg",
+			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/fastapi/fastapi-original.svg",
+		},
+		"Django": {
+			Name: "Django",
+			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/django/django-plain.svg",
+		},
+		"Flask": {
+			Name: "Flask",
+			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flask/flask-original.svg",
 		},
 
 		// Databases
@@ -78,13 +86,21 @@ func getTechnologyData() map[string]models.Technology {
 			Name: "Google Cloud",
 			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/googlecloud/googlecloud-original.svg",
 		},
-		"Azure": {
-			Name: "Azure",
-			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/azure/azure-original.svg",
+		"Nginx": {
+			Name: "Nginx",
+			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nginx/nginx-original.svg",
 		},
 		"Terraform": {
 			Name: "Terraform",
 			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/terraform/terraform-original.svg",
+		},
+		"Linux": {
+			Name: "Linux",
+			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg",
+		},
+		"Virtualization": {
+			Name: "Virtualization",
+			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vagrant/vagrant-original.svg",
 		},
 
 		// Message Queues & Streaming
@@ -161,14 +177,6 @@ func getTechnologyData() map[string]models.Technology {
 		},
 
 		// Build Tools & CI/CD
-		"Maven": {
-			Name: "Maven",
-			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/maven/maven-original.svg",
-		},
-		"Gradle": {
-			Name: "Gradle",
-			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/gradle/gradle-plain.svg",
-		},
 		"GitHub Actions": {
 			Name: "GitHub Actions",
 			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg",
@@ -181,19 +189,19 @@ func getTechnologyData() map[string]models.Technology {
 		// Architecture Patterns (using generic icons)
 		"Microservices": {
 			Name: "Microservices",
-			Icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/kubernetes.svg",
+			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kubernetes/kubernetes-plain.svg",
 		},
 		"Event Sourcing": {
 			Name: "Event Sourcing",
-			Icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/apachekafka.svg",
+			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/apachekafka/apachekafka-original.svg",
 		},
 		"CQRS": {
 			Name: "CQRS",
-			Icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/graphql.svg",
+			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/graphql/graphql-plain.svg",
 		},
 		"DDD": {
 			Name: "DDD",
-			Icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/databricks.svg",
+			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/databricks/databricks-original.svg",
 		},
 	}
 }

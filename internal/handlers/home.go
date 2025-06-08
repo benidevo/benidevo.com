@@ -32,7 +32,7 @@ func (h *HomeHandler) HomePage(c *gin.Context) {
 
 	data := models.HomePageData{
 		Title:            "Benjamin Idewor | Backend Engineer",
-		Description:      "Backend Engineer specializing in Distributed Systems, Microservices, and Scalable Architecture. Based in Berlin, Germany.",
+		Description:      "Software Engineer specializing in Distributed Systems, Microservices, and Scalable Architecture. Based in Berlin, Germany.",
 		CanonicalURL:     c.Request.URL.String(),
 		CurrentYear:      time.Now().Year(),
 		FeaturedProjects: featuredProjects,
@@ -40,23 +40,4 @@ func (h *HomeHandler) HomePage(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "index.html", data)
-}
-
-// ProjectDetails handles HTMX requests for project details
-func (h *HomeHandler) ProjectDetails(c *gin.Context) {
-	projectID := c.Param("id")
-
-	log.Info().Str("project_id", projectID).Msg("Fetching project details")
-
-	projectDetails, err := h.projectService.GetProjectDetails(projectID)
-	if err != nil {
-		log.Error().Err(err).Str("project_id", projectID).Msg("Failed to fetch project details")
-		c.HTML(http.StatusNotFound, "project_error.html", gin.H{
-			"message": "Project not found",
-		})
-		return
-	}
-
-	// Render project details partial for HTMX
-	c.HTML(http.StatusOK, "project_details.html", projectDetails)
 }

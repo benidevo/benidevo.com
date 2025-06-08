@@ -133,21 +133,6 @@ func (g *GitHubService) GetRepository(repoName string) (*models.GitHubRepository
 	return &repo, nil
 }
 
-// GetProjectsData fetches projects.json from the data repository
-func (g *GitHubService) GetProjectsData(dataRepo string) ([]models.ProjectDetails, error) {
-	content, err := g.GetFileContent(dataRepo, "projects.json")
-	if err != nil {
-		return nil, fmt.Errorf("failed to fetch projects data: %w", err)
-	}
-
-	var projects []models.ProjectDetails
-	if err := json.Unmarshal(content, &projects); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal projects data: %w", err)
-	}
-
-	return projects, nil
-}
-
 // GetSkillsData fetches skills.json from the data repository
 func (g *GitHubService) GetSkillsData(dataRepo string) ([]models.SkillCategory, error) {
 	content, err := g.GetFileContent(dataRepo, "skills.json")

@@ -1,12 +1,14 @@
-/* Theme Configuration - Easily modifiable CSS variables */
+/* Theme Configuration - Dark mode by default */
 :root {
-  /* Color Palette - Softer, warmer tones */
-  --color-primary: #334155;    /* Softer slate - easier on eyes */
-  --color-secondary: #3B82F6;  /* Friendly blue - not too harsh */
-  --color-accent: #10B981;     /* Fresh emerald - approachable */
-  --color-neutral: #64748B;    /* Balanced gray - readable but not stark */
-  --color-background: #FAFBFC; /* Warm off-white */
-  --color-surface: #FFFFFF;    /* Clean white for cards */
+  /* Dark Theme - Default */
+  --color-primary: #F1F5F9;    /* Light text on dark */
+  --color-secondary: #60A5FA;  /* Lighter blue */
+  --color-accent: #34D399;     /* Lighter green */
+  --color-neutral: #94A3B8;    /* Lighter gray */
+  --color-background: #0F172A; /* Dark background */
+  --color-surface: #1E293B;    /* Dark surface */
+  --color-navbar: #0A1628;     /* Darker navbar for distinction */
+  --color-footer: #0F172A;     /* Dark footer */
   
   /* Typography */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
@@ -26,9 +28,9 @@
   --radius-lg: 0.75rem;    /* 12px */
   
   /* Shadows - Softer for better visual comfort */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-  --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 10px 10px -5px rgb(0 0 0 / 0.03);
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.15), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.2), 0 10px 10px -5px rgb(0 0 0 / 0.1);
   
   /* Transitions */
   --transition-fast: 150ms ease-in-out;
@@ -36,16 +38,71 @@
   --transition-slow: 500ms ease-in-out;
 }
 
-/* Dark theme variant (optional) */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-primary: #F1F5F9;    /* Light text on dark */
-    --color-secondary: #60A5FA;  /* Lighter blue */
-    --color-accent: #34D399;     /* Lighter green */
-    --color-neutral: #94A3B8;    /* Lighter gray */
-    --color-background: #0F172A; /* Dark background */
-    --color-surface: #1E293B;    /* Dark surface */
+/* Light theme when toggled */
+[data-theme="light"] {
+  --color-primary: #334155;    /* Softer slate - easier on eyes */
+  --color-secondary: #3B82F6;  /* Friendly blue - not too harsh */
+  --color-accent: #10B981;     /* Fresh emerald - approachable */
+  --color-neutral: #64748B;    /* Balanced gray - readable but not stark */
+  --color-background: #FAFBFC; /* Warm off-white */
+  --color-surface: #FFFFFF;    /* Clean white for cards */
+  --color-navbar: #F8FAFC;     /* Light navbar with slight distinction */
+  --color-footer: #1F2937;     /* Dark footer for light mode */
+  
+  /* Light theme shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 10px 10px -5px rgb(0 0 0 / 0.03);
+}
+
+/* Theme toggle button styles */
+.theme-toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background: var(--color-neutral);
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.theme-toggle::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: var(--color-surface);
+  border-radius: 50%;
+  transition: transform var(--transition-fast);
+}
+
+[data-theme="light"] .theme-toggle::before {
+  transform: translateX(20px);
+}
+
+.theme-toggle:hover {
+  background: var(--color-secondary);
+}
+
+/* Pulse animation for scroll effects */
+@keyframes pulse-once {
+  0% {
+    box-shadow: 0 0 0 0 var(--color-accent);
   }
+  50% {
+    box-shadow: 0 0 0 20px rgba(52, 211, 153, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0);
+  }
+}
+
+.animate-pulse-once {
+  animation: pulse-once 1s ease-out;
+  position: relative;
 }
 
 /* Import Google Fonts */

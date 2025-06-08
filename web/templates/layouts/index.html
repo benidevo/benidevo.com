@@ -3,33 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{if .Title}}{{.Title}}{{else}}Benjamin Idewor | Backend Engineer{{end}}</title>
-    <meta name="description" content="{{if .Description}}{{.Description}}{{else}}Backend Engineer specializing in Distributed Systems, Microservices, and Scalable Architecture{{end}}">
-    
+    <title>{{if .Title}}{{.Title}}{{else}}Benjamin Idewor | Software Engineer{{end}}</title>
+    <meta name="description" content="{{if .Description}}{{.Description}}{{else}}Software Engineer specializing in Distributed Systems, Microservices, and Scalable Architecture{{end}}">
+
     <!-- Preload critical fonts -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" as="style">
-    
+
     <!-- Styles -->
     <link href="/static/css/theme.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.10" defer></script>
-    
+
     <!-- Alpine.js -->
     <script src="https://unpkg.com/alpinejs@3.13.5/dist/cdn.min.js" defer></script>
-    
+
     <!-- Particles.js -->
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
-    
+
     <!-- SEO and Social Meta -->
     <meta property="og:title" content="{{if .Title}}{{.Title}}{{else}}Benjamin Idewor{{end}}">
-    <meta property="og:description" content="{{if .Description}}{{.Description}}{{else}}Backend Engineer specializing in Distributed Systems{{end}}">
+    <meta property="og:description" content="{{if .Description}}{{.Description}}{{else}}Software Engineer specializing in Distributed Systems{{end}}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{.CanonicalURL}}">
     <meta name="twitter:card" content="summary_large_image">
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
 </head>
@@ -37,32 +37,128 @@
     scrollToSection(sectionId) {
         const element = document.getElementById(sectionId);
         if (element) {
-            const headerHeight = 64; // Account for sticky header
+            const isMobile = window.innerWidth < 640;
+            const headerHeight = isMobile ? 60 : 80; // Smaller offset on mobile
             const elementPosition = element.offsetTop - headerHeight;
-            window.scrollTo({ 
-                top: elementPosition, 
-                behavior: 'smooth' 
+            window.scrollTo({
+                top: elementPosition,
+                behavior: 'smooth'
             });
         }
+    },
+    animatedScrollToContact() {
+        // Create particle container
+        const particleContainer = document.createElement('div');
+        particleContainer.style.cssText = 'position:fixed;inset:0;z-index:9999;pointer-events:none;';
+        document.body.appendChild(particleContainer);
+
+        // Create particles
+        const particleCount = 60;
+        const colors = ['var(--color-secondary)', 'var(--color-accent)', 'var(--color-primary)'];
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            const size = Math.random() * 12 + 4;
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const startX = Math.random() * window.innerWidth;
+            const startY = Math.random() * window.innerHeight;
+            const endX = startX + (Math.random() - 0.5) * 400;
+            const endY = startY + (Math.random() - 0.5) * 400;
+
+            particle.style.cssText = `
+                position:absolute;
+                width:${size}px;
+                height:${size}px;
+                background:${color};
+                border-radius:50%;
+                left:${startX}px;
+                top:${startY}px;
+                opacity:0;
+                box-shadow: 0 0 ${size}px ${color}, 0 0 ${size * 2}px ${color};
+                animation:particleFade 1.5s ease-out ${i * 0.015}s;
+            `;
+
+            particle.style.setProperty('--endX', `${endX}px`);
+            particle.style.setProperty('--endY', `${endY}px`);
+
+            particleContainer.appendChild(particle);
+        }
+
+        // Add animation styles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes particleFade {
+                0% {
+                    opacity: 0;
+                    transform: translate(0, 0) scale(0);
+                    filter: blur(0px);
+                }
+                40% {
+                    opacity: 1;
+                    transform: translate(calc(var(--endX) * 0.3), calc(var(--endY) * 0.3)) scale(1.5);
+                    filter: blur(0px);
+                }
+                70% {
+                    opacity: 0.8;
+                    transform: translate(calc(var(--endX) * 0.7), calc(var(--endY) * 0.7)) scale(1);
+                    filter: blur(1px);
+                }
+                100% {
+                    opacity: 0;
+                    transform: translate(var(--endX), var(--endY)) scale(0.3);
+                    filter: blur(3px);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Fade out with particles
+        document.body.style.transition = 'opacity 0.8s ease-in-out';
+        document.body.style.opacity = '0.05';
+
+        setTimeout(() => {
+            // Scroll to contact instantly while faded out
+            const contactSection = document.getElementById('contact');
+            if (contactSection) {
+                const headerHeight = 80;
+                const elementPosition = contactSection.offsetTop - headerHeight;
+                window.scrollTo({ top: elementPosition, behavior: 'auto' });
+
+                // Add pulse effect
+                contactSection.classList.add('animate-pulse-once');
+
+                // Fade back in
+                setTimeout(() => {
+                    document.body.style.opacity = '1';
+
+                    // Clean up particles
+                    setTimeout(() => {
+                        particleContainer.remove();
+                        style.remove();
+                        contactSection.classList.remove('animate-pulse-once');
+                    }, 1500);
+                }, 200);
+            }
+        }, 800);
     }
 }">
     <!-- Header -->
-    <header class="bg-surface shadow-sm sticky top-0 z-50" x-data="{ mobileMenuOpen: false }">
-        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
+    <header class="shadow-md sticky top-0 z-50" style="background-color: var(--color-navbar);" x-data="{ mobileMenuOpen: false }">
+        <nav class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-14 sm:h-16">
                 <!-- Logo/Brand -->
                 <div class="flex-shrink-0">
                     <a href="/" class="flex items-center space-x-2">
-                        <div class="w-8 h-8 bg-secondary rounded-lg flex items-center justify-center">
-                            <span class="text-white font-bold text-sm">BI</span>
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center shadow-sm" style="background-color: var(--color-footer);">
+                            <span class="font-bold text-sm text-white">BI</span>
                         </div>
                         <span class="text-primary font-semibold text-lg hidden sm:block">Benjamin Idewor</span>
                     </a>
                 </div>
-                
+
                 <!-- Desktop Navigation -->
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-8">
+                <div class="hidden md:flex items-center space-x-8">
+                    <div class="flex items-baseline space-x-8">
                         <button @click="scrollToSection('hero')" class="text-primary hover:text-secondary px-3 py-2 text-sm font-medium transition-colors">
                             Home
                         </button>
@@ -79,11 +175,19 @@
                             Contact
                         </button>
                     </div>
+
+                    <!-- Theme Toggle -->
+                    <button class="theme-toggle ml-4" @click="toggleTheme()" title="Toggle theme" aria-label="Toggle theme"></button>
+                    </div>
                 </div>
-                
-                <!-- Mobile menu button -->
-                <div class="md:hidden">
-                    <button @click="mobileMenuOpen = !mobileMenuOpen" 
+
+                <!-- Mobile menu button and theme toggle -->
+                <div class="md:hidden flex items-center space-x-3">
+                    <!-- Theme Toggle for mobile -->
+                    <button class="theme-toggle" @click="toggleTheme()" title="Toggle theme" aria-label="Toggle theme"></button>
+
+                    <!-- Mobile menu button -->
+                    <button @click="mobileMenuOpen = !mobileMenuOpen"
                             class="text-neutral hover:text-primary p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -92,9 +196,9 @@
                     </button>
                 </div>
             </div>
-            
+
             <!-- Mobile Navigation -->
-            <div x-show="mobileMenuOpen" 
+            <div x-show="mobileMenuOpen"
                  x-transition:enter="transition ease-out duration-200"
                  x-transition:enter-start="opacity-0 scale-95"
                  x-transition:enter-end="opacity-100 scale-100"
@@ -102,7 +206,7 @@
                  x-transition:leave-start="opacity-100 scale-100"
                  x-transition:leave-end="opacity-0 scale-95"
                  class="md:hidden">
-                <div class="px-2 pt-2 pb-3 space-y-1 bg-surface border-t border-neutral/20">
+                <div class="px-2 pt-2 pb-3 space-y-1 border-t border-neutral/20" style="background-color: var(--color-navbar);">
                     <button @click="scrollToSection('hero'); mobileMenuOpen = false" class="text-primary block px-3 py-2 text-base font-medium w-full text-left">Home</button>
                     <button @click="scrollToSection('projects'); mobileMenuOpen = false" class="text-neutral hover:text-secondary block px-3 py-2 text-base font-medium transition-colors w-full text-left">Projects</button>
                     <button @click="scrollToSection('skills'); mobileMenuOpen = false" class="text-neutral hover:text-secondary block px-3 py-2 text-base font-medium transition-colors w-full text-left">Skills</button>
@@ -112,26 +216,25 @@
             </div>
         </nav>
     </header>
-    
+
     <!-- Main Content -->
     <main>
         <!-- Hero Section -->
         <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
             <!-- Particles Background -->
             <div id="particles-js" class="absolute inset-0 z-0"></div>
-            
+
             <!-- Hero Content -->
             <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     <!-- Text Content -->
                     <div class="text-center lg:text-left">
                         <h1 class="text-h1 text-primary mb-6 animate-fade-in">
-                            Backend Engineer<br>
+                            Software Engineer<br>
                             <span class="text-secondary">Distributed Systems</span>
                         </h1>
                         <p class="text-xl text-neutral mb-8 max-w-2xl animate-slide-up">
-                            I build scalable, resilient systems that power modern applications. 
-                            Specializing in microservices, event-driven architecture, and high-performance backends.
+                            I build scalable, resilient systems that power modern applications.
                         </p>
                         <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-slide-up">
                             <button @click="scrollToSection('projects')" class="btn-primary">
@@ -141,13 +244,9 @@
                                 Get In Touch
                             </button>
                         </div>
-                        
-                        <!-- Location & Status -->
-                        <div class="mt-8 flex items-center justify-center lg:justify-start space-x-6 text-sm text-neutral">
-                            <div class="flex items-center space-x-2">
-                                <div class="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
-                                <span>Available for opportunities</span>
-                            </div>
+
+                        <!-- Location -->
+                        <div class="mt-8 flex items-center justify-center lg:justify-start text-sm text-neutral">
                             <div class="flex items-center space-x-2">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
@@ -156,26 +255,15 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Profile Image -->
                     <div class="flex justify-center lg:justify-end">
                         <div class="relative">
                             <div class="w-80 h-80 rounded-full bg-gradient-to-br from-secondary to-accent p-1 animate-fade-in">
-                                <div class="w-full h-full rounded-full bg-surface flex items-center justify-center">
-                                    <!-- Placeholder for professional headshot -->
-                                    <div class="w-72 h-72 rounded-full bg-gradient-to-br from-neutral/20 to-neutral/10 flex items-center justify-center">
-                                        <svg class="w-32 h-32 text-neutral/40" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Floating badges -->
-                            <div class="absolute -top-4 -right-4 bg-accent text-white px-3 py-1 rounded-full text-sm font-medium animate-bounce">
-                                Go Expert
-                            </div>
-                            <div class="absolute -bottom-4 -left-4 bg-secondary text-white px-3 py-1 rounded-full text-sm font-medium animate-bounce" style="animation-delay: 0.5s">
-                                Microservices
+                                <img src="/static/images/profile.jpeg"
+                                     alt="Benjamin Idewor - Backend Engineer"
+                                     class="w-full h-full rounded-full object-cover object-top"
+                                     loading="eager" />
                             </div>
                         </div>
                     </div>
@@ -190,13 +278,14 @@
                     <h2 class="text-h2 text-primary mb-6">About Me</h2>
                     <div class="max-w-3xl mx-auto text-left space-y-8">
                         <p class="text-lg text-neutral leading-relaxed">
-                            I'm a passionate backend engineer with over 6 years of experience building distributed systems and microservices architectures. Currently based in Berlin, Germany, I specialize in creating scalable, resilient systems that power modern applications.
+                            I'm a software engineer with over 5 years of experience building distributed systems and microservices architectures. Currently based in Berlin, Germany, I specialize in creating scalable, resilient systems that power modern applications.
                         </p>
                         <p class="text-lg text-neutral leading-relaxed">
-                            My expertise spans from designing event-driven architectures to implementing high-performance APIs that handle thousands of requests per second. I'm particularly passionate about Go and Java ecosystems, distributed consensus algorithms, and building systems that gracefully handle failure.
+                            My expertise spans from designing event-driven architectures to implementing high-performance APIs that handle thousands of requests per second. I'm particularly passionate about Go, Python and Java ecosystems, distributed consensus algorithms, and building systems that gracefully handle failure.
                         </p>
                         <p class="text-lg text-neutral leading-relaxed">
-                            When I'm not coding, you'll find me exploring Berlin's tech scene, contributing to open source projects, or writing about distributed systems patterns and best practices.
+
+                            When I'm not coding, you'll find me making music, playing guitar and piano, or singing. I've found that music and technology both require creativity, precision, and a deep understanding of complex systems.
                         </p>
                     </div>
                 </div>
@@ -209,10 +298,10 @@
                 <div class="text-center mb-20">
                     <h2 class="text-h2 text-primary mb-6">Tech Stack</h2>
                     <p class="text-xl text-neutral max-w-3xl mx-auto">
-                        Technologies I work with to build scalable, high-performance systems.
+                        Technologies I work with to build scalable systems.
                     </p>
                 </div>
-                
+
                 <!-- Skills Categories -->
                 <div class="space-y-12">
                     {{range .SkillCategories}}
@@ -243,20 +332,20 @@
                         A selection of my most impactful work in distributed systems, microservices, and backend engineering.
                     </p>
                 </div>
-                
+
                 <!-- Projects Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="projects-grid">
                     {{range .FeaturedProjects}}
-                    <article class="card group cursor-pointer" 
-                             hx-get="/projects/{{.ID}}/details" 
-                             hx-target="#project-details-{{.ID}}" 
+                    <article class="card group cursor-pointer"
+                             hx-get="/projects/{{.ID}}/details"
+                             hx-target="#project-details-{{.ID}}"
                              hx-trigger="click"
                              hx-swap="innerHTML">
                         <div class="flex justify-between items-start mb-6">
                             <h3 class="text-xl font-semibold text-primary group-hover:text-secondary transition-colors pr-4">
                                 {{.Title}}
                             </h3>
-                            <a href="{{.GitHubURL}}" 
+                            <a href="{{.GitHubURL}}"
                                class="text-neutral hover:text-secondary transition-colors flex-shrink-0"
                                target="_blank" rel="noopener noreferrer"
                                onclick="event.stopPropagation()"
@@ -277,42 +366,55 @@
                             </span>
                             {{end}}
                         </div>
-                        
+
                         <!-- Expandable details area -->
                         <div id="project-details-{{.ID}}" class="mt-6 hidden"></div>
                     </article>
                     {{end}}
                 </div>
-                
-                <div class="text-center mt-16">
-                    <button @click="scrollToSection('contact')" class="btn-secondary">
-                        Let's Discuss Your Project
+
+                <div class="flex justify-center mt-16">
+                    <button @click="animatedScrollToContact()"
+                            class="group relative inline-flex items-center gap-2 px-8 py-4 text-secondary font-medium rounded-lg border-2 border-secondary/30 hover:border-secondary transition-all duration-300 hover:shadow-lg hover:shadow-secondary/20 hover:-translate-y-0.5">
+                        <span>Let's Discuss Your Project</span>
+                        <svg class="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                        <!-- Subtle gradient overlay on hover -->
+                        <div class="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-secondary/5 to-accent/5"></div>
                     </button>
                 </div>
             </div>
         </section>
 
         <!-- Contact Section -->
-        <section id="contact" class="py-24 bg-primary text-white">
+        <section id="contact" class="pt-32 pb-24 text-white" style="background-color: var(--color-footer);">
             <div class="max-w-4xl mx-auto px-6 sm:px-8 lg:px-12 text-center">
-                <h2 class="text-h2 mb-6">Ready to Build Something Great?</h2>
+                <h2 class="text-h2 text-gray-300 mb-6">Ready to Build Something Great?</h2>
                 <p class="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
                     I'm always interested in discussing challenging backend engineering problems and scalable system architectures.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-6 justify-center">
-                    <a href="mailto:benjamin.idewor@example.com" class="bg-accent text-white px-8 py-4 rounded-lg font-medium hover:bg-opacity-90 transition-all">
-                        Start a Conversation
+                <div class="flex justify-center">
+                    <a href="mailto:benjamin.idewor@example.com"
+                       class="group relative inline-flex items-center gap-2 px-8 py-4 text-white font-medium rounded-lg border-2 border-accent/30 hover:border-accent transition-all duration-300 hover:shadow-lg hover:shadow-accent/20 hover:-translate-y-0.5">
+                        <span>Start a Conversation</span>
+                        <svg class="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        <!-- Subtle gradient overlay on hover -->
+                        <div class="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-accent/5 to-accent/10"></div>
                     </a>
-                    <button @click="scrollToSection('projects')" class="border-2 border-white text-white px-8 py-4 rounded-lg font-medium hover:bg-white hover:text-primary transition-all">
-                        Explore My Work
-                    </button>
                 </div>
             </div>
         </section>
     </main>
-    
+
     <!-- Footer -->
-    <footer class="bg-primary text-white">
+    <footer class="text-white" style="background-color: var(--color-footer);">
         <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-16">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <!-- Brand Section -->
@@ -324,25 +426,25 @@
                         <span class="text-white font-semibold text-lg">Benjamin Idewor</span>
                     </div>
                     <p class="text-gray-300 mb-4 max-w-md">
-                        Backend Engineer specializing in distributed systems, microservices, and scalable architecture. 
+                        Software Engineer specializing in distributed systems, microservices, and scalable architecture.
                         Based in Berlin, Germany.
                     </p>
                     <div class="flex space-x-4">
-                        <a href="https://github.com/benidevo" 
+                        <a href="https://github.com/benidevo"
                            class="text-gray-300 hover:text-accent transition-colors"
                            target="_blank" rel="noopener noreferrer">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
                             </svg>
                         </a>
-                        <a href="https://linkedin.com/in/benjamin-idewor" 
+                        <a href="https://linkedin.com/in/benjamin-idewor"
                            class="text-gray-300 hover:text-accent transition-colors"
                            target="_blank" rel="noopener noreferrer">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                             </svg>
                         </a>
-                        <a href="mailto:benjamin.idewor@example.com" 
+                        <a href="mailto:benjamin.idewor@example.com"
                            class="text-gray-300 hover:text-accent transition-colors">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
@@ -350,7 +452,7 @@
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- Quick Links -->
                 <div>
                     <h3 class="text-white font-semibold mb-4">Quick Links</h3>
@@ -361,20 +463,20 @@
                         <li><button @click="scrollToSection('contact')" class="text-gray-300 hover:text-accent transition-colors">Contact</button></li>
                     </ul>
                 </div>
-                
-                <!-- Technologies -->
+
+                <!-- Core Technologies -->
                 <div>
-                    <h3 class="text-white font-semibold mb-4">Technologies</h3>
+                    <h3 class="text-white font-semibold mb-4">Core Technologies</h3>
                     <ul class="space-y-2">
                         <li><span class="text-gray-300">Go</span></li>
-                        <li><span class="text-gray-300">Java</span></li>
                         <li><span class="text-gray-300">Python</span></li>
-                        <li><span class="text-gray-300">Kubernetes</span></li>
+                        <li><span class="text-gray-300">Docker & Kubernetes</span></li>
+                        <li><span class="text-gray-300">PostgreSQL & Redis</span></li>
                         <li><span class="text-gray-300">Microservices</span></li>
                     </ul>
                 </div>
             </div>
-            
+
             <!-- Bottom Section -->
             <div class="border-t border-gray-700 mt-8 pt-8 text-center">
                 <p class="text-gray-300 text-sm">
@@ -383,7 +485,7 @@
             </div>
         </div>
     </footer>
-    
+
     <!-- Custom scripts -->
     <script src="/static/js/main.js" defer></script>
 </body>
