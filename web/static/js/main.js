@@ -229,3 +229,48 @@ window.portfolioUtils = {
 
 // Make theme toggle globally available
 window.toggleTheme = toggleTheme;
+
+// Cross-page navigation with scroll
+function navigateToSection(sectionId) {
+  if (window.location.pathname === '/') {
+    const target = document.getElementById(sectionId);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  } else {
+    sessionStorage.setItem('scrollTarget', sectionId);
+    window.location.href = '/';
+  }
+}
+
+// Check for stored scroll target on page load
+window.addEventListener('load', function() {
+  const scrollTarget = sessionStorage.getItem('scrollTarget');
+  if (scrollTarget) {
+    sessionStorage.removeItem('scrollTarget');
+    setTimeout(() => {
+      const target = document.getElementById(scrollTarget);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+  }
+});
+
+// Smooth scroll without URL change
+function scrollToSection(sectionId) {
+  const target = document.getElementById(sectionId);
+  if (target) {
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+// Animated scroll to contact (used in homepage)
+function animatedScrollToContact() {
+  scrollToSection('contact');
+}
+
+// Make functions globally available
+window.navigateToSection = navigateToSection;
+window.scrollToSection = scrollToSection;
+window.animatedScrollToContact = animatedScrollToContact;

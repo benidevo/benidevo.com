@@ -60,22 +60,8 @@ type GitHubRepository struct {
 // ProjectDetail extends the Project with detailed information for individual project pages
 type ProjectDetail struct {
 	Project                *Project `json:"project"`
-	ProblemStatement       string   `json:"problem_statement"`
-	Architecture           string   `json:"architecture"`
-	TechnicalChallenges    []string `json:"technical_challenges"`
-	Solutions              []string `json:"solutions"`
-	Results                string   `json:"results"`
+	DetailedDescription    string   `json:"detailed_description"`
 	ArchitectureDiagramURL string   `json:"architecture_diagram_url"`
-	TechStackDetails       string   `json:"tech_stack_details"`
-	KeyFeatures            []string `json:"key_features"`
-	Metrics                []Metric `json:"metrics"`
-}
-
-// Metric represents a quantifiable project outcome
-type Metric struct {
-	Name  string `json:"name"`
-	Value string `json:"value"`
-	Unit  string `json:"unit"`
 }
 
 // ProjectDetailPageData represents all data needed for a project detail page

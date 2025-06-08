@@ -53,9 +53,9 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="py-24 bg-surface">
+    <section id="about" class="py-16 bg-surface">
         <div class="max-w-4xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div class="text-center mb-20">
+            <div class="text-center mb-12">
                 <h2 class="text-h2 text-primary mb-6">About Me</h2>
                 <div class="max-w-3xl mx-auto text-left space-y-8">
                     <p class="text-lg text-neutral leading-relaxed">
@@ -73,9 +73,9 @@
     </section>
 
     <!-- Tech Stack Section -->
-    <section id="skills" class="py-24 bg-background">
+    <section id="skills" class="py-16 bg-background">
         <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div class="text-center mb-20">
+            <div class="text-center mb-12">
                 <h2 class="text-h2 text-primary mb-6">Tech Stack</h2>
                 <p class="text-xl text-neutral max-w-3xl mx-auto">
                     Technologies I work with to build scalable systems.
@@ -104,9 +104,9 @@
     </section>
 
     <!-- Featured Projects Section -->
-    <section id="projects" class="py-24 bg-surface">
+    <section id="projects" class="py-16 bg-surface">
         <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div class="text-center mb-20">
+            <div class="text-center mb-12">
                 <h2 class="text-h2 text-primary mb-6">Featured Projects</h2>
                 <p class="text-xl text-neutral max-w-3xl mx-auto">
                     A selection of my most impactful work in distributed systems, microservices, and backend engineering.
@@ -146,27 +146,20 @@
                 {{end}}
             </div>
 
-            <div class="flex justify-center mt-16">
-                <button @click="animatedScrollToContact()"
-                        class="group relative inline-flex items-center gap-2 px-8 py-4 text-secondary font-medium rounded-lg border-2 border-secondary/30 hover:border-secondary transition-all duration-300 hover:shadow-lg hover:shadow-secondary/20 hover:-translate-y-0.5">
-                    <span>Let's Discuss Your Project</span>
-                    <svg class="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
-                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                    </svg>
-                    <!-- Subtle gradient overlay on hover -->
-                    <div class="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-secondary/5 to-accent/5"></div>
+            <div class="flex justify-center mt-12">
+                <button @click="animatedScrollToContact()" 
+                        class="inline-flex items-center justify-center px-8 py-4 border-2 border-secondary/30 text-secondary font-medium rounded-lg hover:border-secondary transition-all duration-300">
+                    Let's Discuss Your Project
                 </button>
             </div>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="pt-32 pb-24 text-white" style="background-color: var(--color-footer);">
+    <section id="contact" class="pt-20 pb-16 text-white" style="background-color: var(--color-footer);">
         <div class="max-w-4xl mx-auto px-6 sm:px-8 lg:px-12 text-center">
             <h2 class="text-h2 text-gray-300 mb-6">Ready to Build Something Great?</h2>
-            <p class="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
                 I'm always interested in discussing challenging backend engineering problems and scalable system architectures.
             </p>
             <div class="flex justify-center">

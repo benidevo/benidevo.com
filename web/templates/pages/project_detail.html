@@ -56,159 +56,48 @@
                                     {{end}}
                                 </div>
 
-                                <!-- Metrics -->
-                                {{if .ProjectDetail.Metrics}}
-                                <div class="mt-8">
-                                    <h4 class="text-md font-semibold text-primary mb-4">Key Metrics</h4>
-                                    <div class="space-y-3">
-                                        {{range .ProjectDetail.Metrics}}
-                                        <div class="flex justify-between items-center">
-                                            <span class="text-sm text-neutral">{{.Name}}</span>
-                                            <span class="text-sm font-medium text-secondary">{{.Value}}{{if .Unit}} {{.Unit}}{{end}}</span>
-                                        </div>
-                                        {{end}}
-                                    </div>
-                                </div>
-                                {{end}}
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Problem Statement -->
+            <!-- Architecture Diagram -->
+            {{if .ProjectDetail.ArchitectureDiagramURL}}
             <section class="py-16 bg-surface">
                 <div class="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-                    <h2 class="text-h2 text-primary mb-8">Problem Statement</h2>
-                    <div class="prose prose-lg max-w-none">
-                        <p class="text-neutral leading-relaxed">{{.ProjectDetail.ProblemStatement}}</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Architecture Overview -->
-            <section class="py-16 bg-background">
-                <div class="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-                    <h2 class="text-h2 text-primary mb-8">Architecture Overview</h2>
-                    
-                    {{if .ProjectDetail.ArchitectureDiagramURL}}
-                    <!-- Architecture Diagram -->
-                    <div class="mb-12">
-                        <div class="card p-8 text-center">
-                            <img src="{{.ProjectDetail.ArchitectureDiagramURL}}" 
-                                 alt="{{.ProjectDetail.Project.Title}} Architecture Diagram"
-                                 class="max-w-full h-auto mx-auto rounded-lg shadow-lg"
-                                 loading="lazy">
-                            <p class="text-sm text-neutral mt-4">System Architecture Diagram</p>
-                        </div>
-                    </div>
-                    {{end}}
-
-                    <div class="prose prose-lg max-w-none">
-                        <p class="text-neutral leading-relaxed">{{.ProjectDetail.Architecture}}</p>
-                    </div>
-
-                    {{if .ProjectDetail.TechStackDetails}}
-                    <div class="mt-8">
-                        <h3 class="text-xl font-semibold text-primary mb-4">Technology Stack Details</h3>
-                        <div class="prose prose-lg max-w-none">
-                            <p class="text-neutral leading-relaxed">{{.ProjectDetail.TechStackDetails}}</p>
-                        </div>
-                    </div>
-                    {{end}}
-                </div>
-            </section>
-
-            <!-- Technical Challenges & Solutions -->
-            <section class="py-16 bg-surface">
-                <div class="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                        <!-- Technical Challenges -->
-                        <div>
-                            <h2 class="text-h2 text-primary mb-8">Technical Challenges</h2>
-                            <div class="space-y-6">
-                                {{range $index, $challenge := .ProjectDetail.TechnicalChallenges}}
-                                <div class="card">
-                                    <div class="flex items-start space-x-4">
-                                        <div class="flex-shrink-0 w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center">
-                                            <span class="text-secondary font-semibold text-sm">{{add $index 1}}</span>
-                                        </div>
-                                        <p class="text-neutral leading-relaxed">{{$challenge}}</p>
-                                    </div>
-                                </div>
-                                {{end}}
-                            </div>
-                        </div>
-
-                        <!-- Solutions -->
-                        <div>
-                            <h2 class="text-h2 text-primary mb-8">Solutions & Approach</h2>
-                            <div class="space-y-6">
-                                {{range $index, $solution := .ProjectDetail.Solutions}}
-                                <div class="card">
-                                    <div class="flex items-start space-x-4">
-                                        <div class="flex-shrink-0 w-8 h-8 bg-accent/10 rounded-full flex items-center justify-center">
-                                            <span class="text-accent font-semibold text-sm">{{add $index 1}}</span>
-                                        </div>
-                                        <p class="text-neutral leading-relaxed">{{$solution}}</p>
-                                    </div>
-                                </div>
-                                {{end}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Key Features -->
-            {{if .ProjectDetail.KeyFeatures}}
-            <section class="py-16 bg-background">
-                <div class="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-                    <h2 class="text-h2 text-primary mb-8">Key Features</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {{range .ProjectDetail.KeyFeatures}}
-                        <div class="card">
-                            <div class="flex items-start space-x-3">
-                                <div class="flex-shrink-0 w-6 h-6 bg-accent rounded-full flex items-center justify-center mt-0.5">
-                                    <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
-                                <p class="text-neutral leading-relaxed">{{.}}</p>
-                            </div>
-                        </div>
-                        {{end}}
+                    <h2 class="text-h2 text-primary mb-8">System Architecture</h2>
+                    <div class="card p-8 text-center">
+                        <img src="{{.ProjectDetail.ArchitectureDiagramURL}}" 
+                             alt="{{.ProjectDetail.Project.Title}} Architecture Diagram"
+                             class="max-w-full h-auto mx-auto rounded-lg shadow-lg"
+                             loading="lazy">
+                        <p class="text-sm text-neutral mt-4">System Architecture Overview</p>
                     </div>
                 </div>
             </section>
             {{end}}
 
-            <!-- Results & Impact -->
-            <section class="py-16 bg-surface">
+            <!-- Detailed Description -->
+            <section class="py-16 bg-background">
                 <div class="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-                    <h2 class="text-h2 text-primary mb-8">Results & Impact</h2>
+                    <h2 class="text-h2 text-primary mb-8">About This Project</h2>
                     <div class="prose prose-lg max-w-none">
-                        <p class="text-neutral leading-relaxed">{{.ProjectDetail.Results}}</p>
+                        <p class="text-neutral leading-relaxed">{{.ProjectDetail.DetailedDescription}}</p>
                     </div>
                 </div>
             </section>
 
+
+
             <!-- Navigation -->
             <section class="py-16 bg-background">
                 <div class="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-                    <div class="flex justify-between items-center">
-                        <a href="/" class="btn-secondary flex items-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                            </svg>
+                    <div class="flex justify-start">
+                        <a href="/" 
+                           class="inline-flex items-center justify-center px-8 py-4 border-2 border-secondary/30 text-secondary font-medium rounded-lg hover:border-secondary transition-all duration-300"
+                           onclick="event.preventDefault(); navigateToSection('projects');">
                             Back to Projects
-                        </a>
-                        
-                        <a href="/#contact" class="btn-primary flex items-center gap-2">
-                            Discuss This Project
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                            </svg>
                         </a>
                     </div>
                 </div>

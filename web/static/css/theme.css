@@ -171,6 +171,7 @@
     justify-content: center;
   }
 
+
   @media (min-width: 640px) {
     .btn-secondary {
       min-height: 3rem;
