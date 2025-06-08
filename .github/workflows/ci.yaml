@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: docker compose build app
+
+  lint:
+    name: Lint
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: docker compose build app
+
+      - name: Create app container
+        run: docker compose up -d app
+
+      - name: Check code formatting
+        run: |
+          if ! docker compose exec app sh -c "test -z \$(gofmt -l .)"; then
+            echo "Code formatting issues detected:"
+            docker compose exec app sh -c "gofmt -l ."
+            exit 1
+          fi
+
+      - name: Run go vet
+        run: docker compose exec app go vet ./...
+
+  summary:
+    name: CI Summary
+    needs: [build, lint, test-and-coverage]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check status
+        run: |
+          if [[ "${{ needs.build.result }}" != "success" ]]; then
+            echo "Build job failed"
+            exit 1
+          fi
+          if [[ "${{ needs.lint.result }}" != "success" ]]; then
+            echo "Lint job failed"
+            exit 1
+          fi
+          echo "All checks passed successfully!"
