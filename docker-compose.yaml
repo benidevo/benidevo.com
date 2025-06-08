@@ -1,0 +1,21 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/dev/Dockerfile
+    container_name: app
+    volumes:
+      - .:/app
+      - website-data:/app/data
+    ports:
+      - "8888:8080"
+    networks:
+      - website
+
+
+networks:
+  website:
+
+
+volumes:
+  website-data:
