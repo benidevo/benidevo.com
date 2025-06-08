@@ -1,9 +1,10 @@
+{{define "base"}}
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{if .Title}}{{.Title}} - {{end}}Benjamin Idewor | Backend Engineer</title>
+    <title>{{if .Title}}{{.Title}}{{else}}Benjamin Idewor | Software Engineer{{end}}</title>
     <meta name="description" content="{{if .Description}}{{.Description}}{{else}}Software Engineer specializing in Distributed Systems, Microservices, and Scalable Architecture{{end}}">
 
     <!-- Preload critical fonts -->
@@ -24,7 +25,7 @@
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
 
     <!-- SEO and Social Meta -->
-    <meta property="og:title" content="{{if .Title}}{{.Title}} - {{end}}Benjamin Idewor">
+    <meta property="og:title" content="{{if .Title}}{{.Title}}{{else}}Benjamin Idewor{{end}}">
     <meta property="og:description" content="{{if .Description}}{{.Description}}{{else}}Software Engineer specializing in Distributed Systems{{end}}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{.CanonicalURL}}">
@@ -33,14 +34,120 @@
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
 </head>
-<body class="antialiased">
+<body class="antialiased" x-data="{
+    scrollToSection(sectionId) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+            const isMobile = window.innerWidth < 640;
+            const headerHeight = isMobile ? 60 : 80; // Smaller offset on mobile
+            const elementPosition = element.offsetTop - headerHeight;
+            window.scrollTo({
+                top: elementPosition,
+                behavior: 'smooth'
+            });
+        }
+    },
+    animatedScrollToContact() {
+        // Create particle container
+        const particleContainer = document.createElement('div');
+        particleContainer.style.cssText = 'position:fixed;inset:0;z-index:9999;pointer-events:none;';
+        document.body.appendChild(particleContainer);
+
+        // Create particles
+        const particleCount = 60;
+        const colors = ['var(--color-secondary)', 'var(--color-accent)', 'var(--color-primary)'];
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            const size = Math.random() * 12 + 4;
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const startX = Math.random() * window.innerWidth;
+            const startY = Math.random() * window.innerHeight;
+            const endX = startX + (Math.random() - 0.5) * 400;
+            const endY = startY + (Math.random() - 0.5) * 400;
+
+            particle.style.cssText = `
+                position:absolute;
+                width:${size}px;
+                height:${size}px;
+                background:${color};
+                border-radius:50%;
+                left:${startX}px;
+                top:${startY}px;
+                opacity:0;
+                box-shadow: 0 0 ${size}px ${color}, 0 0 ${size * 2}px ${color};
+                animation:particleFade 1.5s ease-out ${i * 0.015}s;
+            `;
+
+            particle.style.setProperty('--endX', `${endX}px`);
+            particle.style.setProperty('--endY', `${endY}px`);
+
+            particleContainer.appendChild(particle);
+        }
+
+        // Add animation styles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes particleFade {
+                0% {
+                    opacity: 0;
+                    transform: translate(0, 0) scale(0);
+                    filter: blur(0px);
+                }
+                40% {
+                    opacity: 1;
+                    transform: translate(calc(var(--endX) * 0.3), calc(var(--endY) * 0.3)) scale(1.5);
+                    filter: blur(0px);
+                }
+                70% {
+                    opacity: 0.8;
+                    transform: translate(calc(var(--endX) * 0.7), calc(var(--endY) * 0.7)) scale(1);
+                    filter: blur(1px);
+                }
+                100% {
+                    opacity: 0;
+                    transform: translate(var(--endX), var(--endY)) scale(0.3);
+                    filter: blur(3px);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Fade out with particles
+        document.body.style.transition = 'opacity 0.8s ease-in-out';
+        document.body.style.opacity = '0.05';
+
+        setTimeout(() => {
+            // Scroll to contact instantly while faded out
+            const contactSection = document.getElementById('contact');
+            if (contactSection) {
+                const headerHeight = 80;
+                const elementPosition = contactSection.offsetTop - headerHeight;
+                window.scrollTo({ top: elementPosition, behavior: 'auto' });
+
+                // Add pulse effect
+                contactSection.classList.add('animate-pulse-once');
+
+                // Fade back in
+                setTimeout(() => {
+                    document.body.style.opacity = '1';
+
+                    // Clean up particles
+                    setTimeout(() => {
+                        particleContainer.remove();
+                        style.remove();
+                        contactSection.classList.remove('animate-pulse-once');
+                    }, 1500);
+                }, 200);
+            }
+        }, 800);
+    }
+}">
     <!-- Header -->
     {{template "partials/header.html" .}}
 
     <!-- Main Content -->
-    <main>
-        {{template "content" .}}
-    </main>
+    {{template "content" .}}
 
     <!-- Footer -->
     {{template "partials/footer.html" .}}
@@ -49,3 +156,4 @@
     <script src="/static/js/main.js" defer></script>
 </body>
 </html>
+{{end}}

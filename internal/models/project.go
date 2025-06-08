@@ -57,6 +57,36 @@ type GitHubRepository struct {
 	Private         bool      `json:"private"`
 }
 
+// ProjectDetail extends the Project with detailed information for individual project pages
+type ProjectDetail struct {
+	Project                *Project `json:"project"`
+	ProblemStatement       string   `json:"problem_statement"`
+	Architecture           string   `json:"architecture"`
+	TechnicalChallenges    []string `json:"technical_challenges"`
+	Solutions              []string `json:"solutions"`
+	Results                string   `json:"results"`
+	ArchitectureDiagramURL string   `json:"architecture_diagram_url"`
+	TechStackDetails       string   `json:"tech_stack_details"`
+	KeyFeatures            []string `json:"key_features"`
+	Metrics                []Metric `json:"metrics"`
+}
+
+// Metric represents a quantifiable project outcome
+type Metric struct {
+	Name  string `json:"name"`
+	Value string `json:"value"`
+	Unit  string `json:"unit"`
+}
+
+// ProjectDetailPageData represents all data needed for a project detail page
+type ProjectDetailPageData struct {
+	Title         string         `json:"title"`
+	Description   string         `json:"description"`
+	CanonicalURL  string         `json:"canonical_url"`
+	CurrentYear   int            `json:"current_year"`
+	ProjectDetail *ProjectDetail `json:"project_detail"`
+}
+
 // HomePageData represents all data needed for the home page
 type HomePageData struct {
 	Title            string          `json:"title"`

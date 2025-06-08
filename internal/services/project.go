@@ -31,6 +31,33 @@ func (p *ProjectService) GetFeaturedProjects() []*models.Project {
 	return featuredProjects
 }
 
+// GetProjectDetail returns detailed information for a specific project
+func (p *ProjectService) GetProjectDetail(projectID int) *models.ProjectDetail {
+	projectData := p.getFeaturedProjectsData()
+
+	var project *models.Project
+	for _, proj := range projectData {
+		if proj.ID == projectID {
+			project = proj
+			break
+		}
+	}
+
+	if project == nil {
+		return nil
+	}
+
+	detailedProjects := p.getDetailedProjectsData()
+
+	for _, detail := range detailedProjects {
+		if detail.Project.ID == projectID {
+			return detail
+		}
+	}
+
+	return nil
+}
+
 // GetSkillCategories returns skill categories for the home page
 func (p *ProjectService) GetSkillCategories() []models.SkillCategory {
 	return []models.SkillCategory{

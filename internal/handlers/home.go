@@ -31,13 +31,13 @@ func (h *HomeHandler) HomePage(c *gin.Context) {
 	skillCategories := h.projectService.GetSkillCategories()
 
 	data := models.HomePageData{
-		Title:            "Benjamin Idewor | Backend Engineer",
-		Description:      "Software Engineer specializing in Distributed Systems, Microservices, and Scalable Architecture. Based in Berlin, Germany.",
+		Title:            "Benjamin Idewor | Software Engineer",
+		Description:      "Software Engineer specializing in Distributed Systems, Microservices, and Scalable Architecture.",
 		CanonicalURL:     c.Request.URL.String(),
 		CurrentYear:      time.Now().Year(),
 		FeaturedProjects: featuredProjects,
 		SkillCategories:  skillCategories,
 	}
 
-	c.HTML(http.StatusOK, "index.html", data)
+	c.HTML(http.StatusOK, "home", data)
 }

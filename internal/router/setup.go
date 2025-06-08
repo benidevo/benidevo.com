@@ -1,9 +1,11 @@
 package router
 
 import (
+	"html/template"
 	"net/http"
 	"time"
 
+	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
 
@@ -11,18 +13,77 @@ import (
 	"github.com/benidevo/website/internal/services"
 )
 
+func createMultiTemplateRenderer() multitemplate.Renderer {
+	r := multitemplate.NewRenderer()
+
+	// Set up template functions
+	funcMap := template.FuncMap{
+		"add": func(a, b int) int {
+			return a + b
+		},
+		"sub": func(a, b int) int {
+			return a - b
+		},
+		"slice": func(items interface{}, start, end int) interface{} {
+			switch v := items.(type) {
+			case []string:
+				if start >= len(v) {
+					return []string{}
+				}
+				if end > len(v) {
+					end = len(v)
+				}
+				return v[start:end]
+			}
+			return items
+		},
+		"eq": func(a, b interface{}) bool {
+			return a == b
+		},
+	}
+
+	// Create templates with base layout, partials, and page content
+	r.AddFromFilesFuncs("home", funcMap,
+		"web/templates/home.html",
+		"web/templates/layouts/base.html",
+		"web/templates/partials/header.html",
+		"web/templates/partials/footer.html",
+		"web/templates/pages/home.html")
+
+	r.AddFromFilesFuncs("project_detail", funcMap,
+		"web/templates/project_detail.html",
+		"web/templates/layouts/base.html",
+		"web/templates/partials/header.html",
+		"web/templates/partials/footer.html",
+		"web/templates/pages/project_detail.html")
+
+	r.AddFromFilesFuncs("404", funcMap,
+		"web/templates/404.html",
+		"web/templates/layouts/base.html",
+		"web/templates/partials/header.html",
+		"web/templates/partials/footer.html",
+		"web/templates/pages/404.html")
+
+	return r
+}
+
 func SetupRoutes() *gin.Engine {
 	router := gin.Default()
 	router.Use(globalErrorHandler)
 
-	router.LoadHTMLGlob("web/templates/**/*.html")
+	router.HTMLRender = createMultiTemplateRenderer()
 	router.Static("/static", "./web/static")
 
 	projectService := services.NewProjectService(nil)
 
 	homeHandler := handlers.NewHomeHandler(projectService)
+	projectHandler := handlers.NewProjectHandler(projectService)
 
 	router.GET("/", homeHandler.HomePage)
+
+	// Project routes
+	router.GET("/projects/:id", projectHandler.GetProjectDetail)
+	router.GET("/projects/:id/details", projectHandler.GetProjectDetailFragment)
 
 	// Health check
 	router.GET("/health", func(c *gin.Context) {
@@ -33,7 +94,7 @@ func SetupRoutes() *gin.Engine {
 	})
 
 	router.NoRoute(func(c *gin.Context) {
-		c.HTML(http.StatusNotFound, "layouts/base.html", gin.H{
+		c.HTML(http.StatusNotFound, "404", gin.H{
 			"Title":       "Page Not Found",
 			"Description": "The page you're looking for doesn't exist.",
 			"CurrentYear": time.Now().Year(),
@@ -53,10 +114,10 @@ func globalErrorHandler(c *gin.Context) {
 		if err := recover(); err != nil {
 			log.Error().Err(err.(error)).Msg("Recovered from panic")
 
-			c.HTML(http.StatusInternalServerError, "layouts/base.html", gin.H{
-				"title":       "Something Went Wrong",
-				"page":        "500",
-				"currentYear": time.Now().Year(),
+			c.HTML(http.StatusInternalServerError, "404", gin.H{
+				"Title":       "Something Went Wrong",
+				"Description": "An internal server error occurred.",
+				"CurrentYear": time.Now().Year(),
 			})
 			c.Abort()
 		}
@@ -65,10 +126,11 @@ func globalErrorHandler(c *gin.Context) {
 	c.Next()
 
 	if len(c.Errors) > 0 || c.Writer.Status() == http.StatusInternalServerError {
-		c.HTML(http.StatusInternalServerError, "layouts/base.html", gin.H{
-			"title":       "Something Went Wrong",
-			"page":        "500",
-			"currentYear": time.Now().Year(),
+		c.HTML(http.StatusInternalServerError, "404", gin.H{
+			"Title":       "Something Went Wrong",
+			"Description": "An internal server error occurred.",
+			"CurrentYear": time.Now().Year(),
+			"CurrentPage": "500",
 		})
 		c.Abort()
 	}

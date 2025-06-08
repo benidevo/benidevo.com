@@ -1,0 +1,52 @@
+<div class="mt-6 border-t border-neutral/20 pt-6 space-y-4">
+    <!-- Problem Statement -->
+    <div>
+        <h4 class="text-md font-semibold text-primary mb-2">Problem & Solution</h4>
+        <p class="text-sm text-neutral leading-relaxed mb-3">{{.ProjectDetail.ProblemStatement}}</p>
+    </div>
+
+    <!-- Key Features -->
+    {{if .ProjectDetail.KeyFeatures}}
+    <div>
+        <h4 class="text-md font-semibold text-primary mb-2">Key Features</h4>
+        <div class="space-y-2">
+            {{range slice .ProjectDetail.KeyFeatures 0 3}}
+            <div class="flex items-start space-x-2">
+                <div class="flex-shrink-0 w-4 h-4 bg-accent rounded-full flex items-center justify-center mt-0.5">
+                    <svg class="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <p class="text-sm text-neutral">{{.}}</p>
+            </div>
+            {{end}}
+            {{if gt (len .ProjectDetail.KeyFeatures) 3}}
+            <p class="text-xs text-neutral/70 pl-6">And {{sub (len .ProjectDetail.KeyFeatures) 3}} more features...</p>
+            {{end}}
+        </div>
+    </div>
+    {{end}}
+
+    <!-- Metrics -->
+    {{if .ProjectDetail.Metrics}}
+    <div>
+        <h4 class="text-md font-semibold text-primary mb-2">Key Metrics</h4>
+        <div class="grid grid-cols-2 gap-3">
+            {{range slice .ProjectDetail.Metrics 0 4}}
+            <div class="text-center p-2 bg-surface rounded-lg">
+                <div class="text-lg font-semibold text-secondary">{{.Value}}{{if .Unit}}{{.Unit}}{{end}}</div>
+                <div class="text-xs text-neutral">{{.Name}}</div>
+            </div>
+            {{end}}
+        </div>
+    </div>
+    {{end}}
+
+    <!-- Action Button -->
+    <div class="pt-4">
+        <a href="/projects/{{.ProjectDetail.Project.ID}}" 
+           class="btn-primary w-full text-center block">
+            View Full Details
+        </a>
+    </div>
+</div>

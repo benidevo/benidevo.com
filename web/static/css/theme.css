@@ -201,8 +201,14 @@
   
   .card:hover {
     box-shadow: var(--shadow-lg);
-    transform: translateY(-2px);
-    border-color: rgba(59, 130, 246, 0.12);
+    transform: translateY(-4px) scale(1.02);
+    border-color: rgba(59, 130, 246, 0.2);
+  }
+
+  .card.cursor-pointer:hover {
+    box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.15), 0 0 0 1px rgba(59, 130, 246, 0.1);
+    transform: translateY(-6px) scale(1.03);
+    border-color: rgba(59, 130, 246, 0.3);
   }
 
   @media (max-width: 640px) {
@@ -392,5 +398,239 @@
   
   .skill-badge-clean:hover .skill-icon {
     transform: scale(1.1);
+  }
+  
+  /* Project Detail Page Specific Styles */
+  .prose {
+    color: var(--color-neutral);
+    max-width: none;
+  }
+  
+  .prose p {
+    margin-bottom: 1rem;
+    line-height: 1.7;
+  }
+  
+  .prose-lg p {
+    font-size: 1.125rem;
+    line-height: 1.8;
+  }
+  
+  /* Project detail section headings */
+  .text-h1 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+    font-weight: 700;
+  }
+  
+  .text-h2 {
+    font-size: 2rem;
+    line-height: 1.3;
+    font-weight: 600;
+  }
+  
+  @media (min-width: 640px) {
+    .text-h1 {
+      font-size: 3rem;
+    }
+    .text-h2 {
+      font-size: 2.25rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .text-h1 {
+      font-size: 3.5rem;
+    }
+    .text-h2 {
+      font-size: 2.5rem;
+    }
+  }
+  
+  /* Project metrics grid */
+  .project-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+  
+  .metric-card {
+    background-color: var(--color-surface);
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+    text-align: center;
+    border: 1px solid rgba(51, 65, 85, 0.06);
+    transition: var(--transition-normal);
+  }
+  
+  .metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(59, 130, 246, 0.12);
+  }
+  
+  .metric-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-secondary);
+    display: block;
+  }
+  
+  .metric-label {
+    font-size: 0.875rem;
+    color: var(--color-neutral);
+    margin-top: 0.25rem;
+  }
+  
+  /* Challenge and solution cards */
+  .challenge-solution-card {
+    background-color: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    border: 1px solid rgba(51, 65, 85, 0.06);
+    transition: var(--transition-normal);
+  }
+  
+  .challenge-solution-card:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(59, 130, 246, 0.12);
+  }
+  
+  /* Feature list items */
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    background-color: var(--color-surface);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(51, 65, 85, 0.06);
+    transition: var(--transition-normal);
+  }
+  
+  .feature-item:hover {
+    transform: translateX(4px);
+    border-color: rgba(52, 211, 153, 0.2);
+    background-color: rgba(52, 211, 153, 0.02);
+  }
+  
+  .feature-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: var(--color-accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+  }
+  
+  /* Breadcrumb navigation */
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-neutral);
+  }
+  
+  .breadcrumb a {
+    color: var(--color-neutral);
+    text-decoration: none;
+    transition: var(--transition-fast);
+  }
+  
+  .breadcrumb a:hover {
+    color: var(--color-secondary);
+  }
+  
+  .breadcrumb-separator {
+    color: rgba(148, 163, 184, 0.5);
+  }
+  
+  /* Architecture diagram container */
+  .architecture-diagram {
+    background-color: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    text-align: center;
+    border: 1px solid rgba(51, 65, 85, 0.06);
+    transition: var(--transition-normal);
+  }
+  
+  .architecture-diagram:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(59, 130, 246, 0.12);
+  }
+  
+  .architecture-diagram img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+  }
+  
+  /* Navigation buttons for project detail pages */
+  .project-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  @media (max-width: 640px) {
+    .project-nav {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    .project-nav .btn-primary,
+    .project-nav .btn-secondary {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+  
+  /* Section spacing for project detail pages */
+  .project-section {
+    padding: 4rem 0;
+  }
+  
+  @media (max-width: 768px) {
+    .project-section {
+      padding: 2rem 0;
+    }
+  }
+  
+  /* Animation classes */
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.8s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
