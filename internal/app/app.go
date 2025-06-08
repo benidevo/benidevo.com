@@ -15,6 +15,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// App represents the main application structure, holding configuration settings,
+// the Gin router, HTTP server, and a channel for OS signals to manage graceful shutdown.
 type App struct {
 	cfg    *config.Settings
 	router *gin.Engine

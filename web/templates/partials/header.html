@@ -1,0 +1,65 @@
+<header class="bg-surface shadow-sm sticky top-0 z-50" x-data="{ mobileMenuOpen: false }">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <!-- Logo/Brand -->
+            <div class="flex-shrink-0">
+                <a href="/" class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-secondary rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">BI</span>
+                    </div>
+                    <span class="text-primary font-semibold text-lg hidden sm:block">Benjamin Idewor</span>
+                </a>
+            </div>
+            
+            <!-- Desktop Navigation -->
+            <div class="hidden md:block">
+                <div class="ml-10 flex items-baseline space-x-8">
+                    <a href="/" class="text-primary hover:text-secondary px-3 py-2 text-sm font-medium transition-colors">
+                        Home
+                    </a>
+                    <a href="/projects" class="text-neutral hover:text-secondary px-3 py-2 text-sm font-medium transition-colors">
+                        Projects
+                    </a>
+                    <a href="/experience" class="text-neutral hover:text-secondary px-3 py-2 text-sm font-medium transition-colors">
+                        Experience
+                    </a>
+                    <a href="/writing" class="text-neutral hover:text-secondary px-3 py-2 text-sm font-medium transition-colors">
+                        Writing
+                    </a>
+                    <a href="/contact" class="btn-secondary text-sm py-2">
+                        Contact
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Mobile menu button -->
+            <div class="md:hidden">
+                <button @click="mobileMenuOpen = !mobileMenuOpen" 
+                        class="text-neutral hover:text-primary p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Navigation -->
+        <div x-show="mobileMenuOpen" 
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0 scale-95"
+             x-transition:enter-end="opacity-100 scale-100"
+             x-transition:leave="transition ease-in duration-150"
+             x-transition:leave-start="opacity-100 scale-100"
+             x-transition:leave-end="opacity-0 scale-95"
+             class="md:hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 bg-surface border-t border-neutral/20">
+                <a href="/" class="text-primary block px-3 py-2 text-base font-medium">Home</a>
+                <a href="/projects" class="text-neutral hover:text-secondary block px-3 py-2 text-base font-medium transition-colors">Projects</a>
+                <a href="/experience" class="text-neutral hover:text-secondary block px-3 py-2 text-base font-medium transition-colors">Experience</a>
+                <a href="/writing" class="text-neutral hover:text-secondary block px-3 py-2 text-base font-medium transition-colors">Writing</a>
+                <a href="/contact" class="btn-primary text-center block mx-3 mt-4">Contact</a>
+            </div>
+        </div>
+    </nav>
+</header>

@@ -6,22 +6,48 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
+
+	"github.com/benidevo/website/internal/handlers"
+	"github.com/benidevo/website/internal/services"
 )
 
 func SetupRoutes() *gin.Engine {
 	router := gin.Default()
 	router.Use(globalErrorHandler)
 
-	router.GET("/", func(c *gin.Context) {
+	// Load HTML templates
+	router.LoadHTMLGlob("web/templates/**/*.html")
+
+	// Serve static files
+	router.Static("/static", "./web/static")
+
+	// Initialize services
+	projectService := services.NewProjectService(nil) // No GitHub service needed
+
+	// Load project data
+	projectService.LoadProjects()
+
+	// Initialize handlers
+	homeHandler := handlers.NewHomeHandler(projectService)
+
+	// Routes
+	router.GET("/", homeHandler.HomePage)
+	router.GET("/projects/:id/details", homeHandler.ProjectDetails)
+
+	// Health check
+	router.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
-			"message": "Welcome to the API"})
+			"status":    "ok",
+			"timestamp": time.Now().UTC(),
+		})
 	})
 
 	router.NoRoute(func(c *gin.Context) {
-		c.JSON(http.StatusNotFound, gin.H{
-			"error": "Page not found"})
-
-		c.Abort()
+		c.HTML(http.StatusNotFound, "layouts/base.html", gin.H{
+			"Title":       "Page Not Found",
+			"Description": "The page you're looking for doesn't exist.",
+			"CurrentYear": time.Now().Year(),
+		})
 	})
 
 	return router

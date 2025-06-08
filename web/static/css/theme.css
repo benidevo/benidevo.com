@@ -1,0 +1,339 @@
+/* Theme Configuration - Easily modifiable CSS variables */
+:root {
+  /* Color Palette - Softer, warmer tones */
+  --color-primary: #334155;    /* Softer slate - easier on eyes */
+  --color-secondary: #3B82F6;  /* Friendly blue - not too harsh */
+  --color-accent: #10B981;     /* Fresh emerald - approachable */
+  --color-neutral: #64748B;    /* Balanced gray - readable but not stark */
+  --color-background: #FAFBFC; /* Warm off-white */
+  --color-surface: #FFFFFF;    /* Clean white for cards */
+  
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  
+  /* Spacing Scale */
+  --spacing-xs: 0.25rem;   /* 4px */
+  --spacing-sm: 0.5rem;    /* 8px */
+  --spacing-md: 1rem;      /* 16px */
+  --spacing-lg: 1.5rem;    /* 24px */
+  --spacing-xl: 2rem;      /* 32px */
+  --spacing-2xl: 4rem;     /* 64px */
+  
+  /* Border Radius */
+  --radius-sm: 0.25rem;    /* 4px */
+  --radius-md: 0.5rem;     /* 8px */
+  --radius-lg: 0.75rem;    /* 12px */
+  
+  /* Shadows - Softer for better visual comfort */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 10px 10px -5px rgb(0 0 0 / 0.03);
+  
+  /* Transitions */
+  --transition-fast: 150ms ease-in-out;
+  --transition-normal: 300ms ease-in-out;
+  --transition-slow: 500ms ease-in-out;
+}
+
+/* Dark theme variant (optional) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary: #F1F5F9;    /* Light text on dark */
+    --color-secondary: #60A5FA;  /* Lighter blue */
+    --color-accent: #34D399;     /* Lighter green */
+    --color-neutral: #94A3B8;    /* Lighter gray */
+    --color-background: #0F172A; /* Dark background */
+    --color-surface: #1E293B;    /* Dark surface */
+  }
+}
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* Tailwind CSS imports */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base typography styles using CSS variables */
+@layer base {
+  html {
+    font-family: var(--font-sans);
+  }
+  
+  body {
+    background-color: var(--color-background);
+    color: var(--color-neutral);
+    line-height: 1.6;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+  
+  /* Smooth scrolling for sections with offset for sticky header */
+  section[id] {
+    scroll-margin-top: 4rem; /* 64px to account for sticky header */
+  }
+}
+
+/* Component styles */
+@layer components {
+  .btn-primary {
+    @apply bg-secondary text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg font-medium;
+    @apply hover:bg-opacity-90 transition-all;
+    background-color: var(--color-secondary);
+    transition: var(--transition-normal);
+    display: inline-block;
+    text-decoration: none;
+    min-height: 2.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (min-width: 640px) {
+    .btn-primary {
+      min-height: 3rem;
+    }
+  }
+  
+  .btn-secondary {
+    @apply border-2 border-secondary text-secondary px-6 py-3 sm:px-8 sm:py-4 rounded-lg font-medium;
+    @apply hover:bg-secondary hover:text-white transition-all;
+    border-color: var(--color-secondary);
+    color: var(--color-secondary);
+    transition: var(--transition-normal);
+    text-decoration: none;
+    min-height: 2.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (min-width: 640px) {
+    .btn-secondary {
+      min-height: 3rem;
+    }
+  }
+  
+  .card {
+    background-color: var(--color-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(51, 65, 85, 0.06);
+    transition: var(--transition-normal);
+    padding: 1rem;
+    overflow: hidden;
+  }
+  
+  @media (min-width: 640px) {
+    .card {
+      padding: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .card {
+      padding: 2rem;
+    }
+  }
+  
+  .card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+    border-color: rgba(59, 130, 246, 0.12);
+  }
+
+  @media (max-width: 640px) {
+    .card:active {
+      transform: translateY(-1px);
+    }
+  }
+  
+  .tech-badge {
+    @apply inline-flex items-center px-4 py-2 rounded-full text-sm font-medium;
+    background: linear-gradient(135deg, var(--color-secondary), var(--color-accent));
+    color: white;
+    font-size: var(--text-sm);
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.12);
+  }
+  
+  /* Tech badges with icons and names for project cards */
+  .tech-badge-with-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.375rem 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-neutral);
+    border: 1px solid rgba(100, 116, 139, 0.15);
+    background: transparent;
+    transition: var(--transition-fast);
+    min-height: 2rem;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 640px) {
+    .tech-badge-with-icon {
+      gap: 0.375rem;
+      padding: 0.25rem 0.625rem;
+      font-size: 0.8125rem;
+      min-height: auto;
+    }
+  }
+  
+  .tech-badge-with-icon:hover {
+    color: var(--color-primary);
+    border-color: rgba(59, 130, 246, 0.3);
+    background: rgba(59, 130, 246, 0.05);
+    transform: translateY(-1px);
+  }
+  
+  .tech-badge-with-icon .tech-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    transition: var(--transition-fast);
+  }
+
+  @media (min-width: 640px) {
+    .tech-badge-with-icon .tech-icon {
+      width: 0.875rem;
+      height: 0.875rem;
+    }
+  }
+  
+  .tech-badge-with-icon .tech-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: grayscale(0.3);
+    transition: var(--transition-fast);
+  }
+  
+  .tech-badge-with-icon:hover .tech-icon {
+    transform: scale(1.1);
+  }
+
+  .tech-badge-with-icon:hover .tech-icon img {
+    filter: grayscale(0);
+  }
+  
+  .skill-badge {
+    @apply inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium;
+    background-color: var(--color-surface);
+    color: var(--color-primary);
+    border: 1px solid rgba(51, 65, 85, 0.08);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-normal);
+  }
+  
+  .skill-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(59, 130, 246, 0.15);
+    background-color: rgba(59, 130, 246, 0.02);
+  }
+  
+  .skill-badge-enhanced {
+    @apply inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4 rounded-xl text-sm font-medium;
+    background: linear-gradient(135deg, var(--color-surface) 0%, rgba(59, 130, 246, 0.02) 100%);
+    color: var(--color-primary);
+    border: 1px solid rgba(51, 65, 85, 0.08);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+    min-width: 100px;
+  }
+  
+  @media (min-width: 640px) {
+    .skill-badge-enhanced {
+      min-width: 120px;
+    }
+  }
+  
+  .skill-badge-enhanced::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+    transition: left 0.5s ease;
+  }
+  
+  .skill-badge-enhanced:hover::before {
+    left: 100%;
+  }
+  
+  .skill-badge-enhanced:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(59, 130, 246, 0.2);
+  }
+  
+  .skill-icon {
+    @apply flex items-center justify-center w-6 h-6 text-lg;
+    filter: grayscale(0.3);
+    transition: var(--transition-normal);
+  }
+  
+  .skill-badge-enhanced:hover .skill-icon {
+    filter: grayscale(0);
+    transform: scale(1.1);
+  }
+  
+  /* Clean skill badges without background for tech stack section */
+  .skill-badge-clean {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-primary);
+    transition: var(--transition-normal);
+    min-width: 100px;
+    justify-content: center;
+    border: 1px solid transparent;
+  }
+  
+  .skill-badge-clean:hover {
+    transform: translateY(-2px);
+    color: var(--color-secondary);
+    border-color: rgba(59, 130, 246, 0.2);
+    background: rgba(59, 130, 246, 0.05);
+  }
+  
+  .skill-badge-clean .skill-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+    transition: var(--transition-normal);
+  }
+  
+  .skill-badge-clean .skill-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  
+  .skill-badge-clean:hover .skill-icon {
+    transform: scale(1.1);
+  }
+}
