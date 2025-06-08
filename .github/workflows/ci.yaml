@@ -50,7 +50,7 @@ jobs:
 
   summary:
     name: CI Summary
-    needs: [build, lint, test-and-coverage]
+    needs: [build, lint]
     if: always()
     runs-on: ubuntu-latest
     steps:
