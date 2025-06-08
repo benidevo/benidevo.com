@@ -60,33 +60,105 @@ Create a developer-first portfolio that showcases complex system engineering pro
 
 ## 4. Design System & Visual Identity
 
-### Color Palette
+### Color Palette & Theme System
 
-**Primary**: Deep Navy (`#0F172A`) - Technical sophistication, reliability
-**Secondary**: Electric Blue (`#3B82F6`) - Innovation, technical precision
-**Accent**: Emerald Green (`#10B981`) - Success states, growth, active elements
-**Neutral**: Warm Gray (`#64748B`) - Text, backgrounds
-**Background**: Off-white (`#FAFAFA`) - Clean, professional base
+**Dark Theme (Default)**:
 
-**Rationale**: Professional yet modern palette that works well in both light and dark contexts, with sufficient contrast for accessibility.
+- **Primary**: Light Slate (`#F1F5F9`) - High contrast text on dark background
+- **Secondary**: Light Blue (`#60A5FA`) - Interactive elements, links, accents
+- **Accent**: Emerald (`#34D399`) - Success states, call-to-action elements
+- **Neutral**: Blue Gray (`#94A3B8`) - Secondary text, subtle elements
+- **Background**: Dark Navy (`#0F172A`) - Primary dark background
+- **Surface**: Dark Slate (`#1E293B`) - Card backgrounds, elevated surfaces
+- **Navbar**: Darker Navy (`#0A1628`) - Navigation background for distinction
 
-### Typography
+**Light Theme (Optional)**:
 
-**Primary**: Inter (Google Fonts)
+- **Primary**: Slate (`#334155`) - Readable dark text on light background
+- **Secondary**: Blue (`#3B82F6`) - Consistent with dark theme but adjusted
+- **Accent**: Emerald (`#10B981`) - Maintained across themes
+- **Neutral**: Slate Gray (`#64748B`) - Balanced secondary text
+- **Background**: Off-White (`#FAFBFC`) - Warm, comfortable light background
+- **Surface**: Pure White (`#FFFFFF`) - Clean card backgrounds
+- **Navbar**: Light Gray (`#F8FAFC`) - Subtle navigation distinction
 
-- Headers: Inter 600 (Semi-bold)
-- Body: Inter 400 (Regular)
-- Code: JetBrains Mono 400
+**Design Rationale**: Dark-first design reflecting modern developer preferences, with seamless light mode toggle. Colors chosen for optimal contrast and accessibility across both themes.
 
-**Rationale**: Inter provides excellent readability at all sizes and has a technical, modern aesthetic. JetBrains Mono for code blocks ensures optimal developer experience.
+### Typography System
 
-### Visual Hierarchy
+**Font Stack**:
 
-- **H1**: 3.5rem, Inter 600, Deep Navy
-- **H2**: 2.5rem, Inter 600, Deep Navy
-- **H3**: 1.875rem, Inter 600, Deep Navy
-- **Body**: 1rem, Inter 400, Warm Gray
-- **Code**: 0.875rem, JetBrains Mono, Electric Blue background
+- **Primary**: Inter (Google Fonts) - Technical precision with excellent readability
+- **Monospace**: JetBrains Mono (Google Fonts) - Developer-focused code display
+
+**Typography Scale**:
+
+- **H1**: 2.5rem (mobile) / 3.5rem (desktop), Inter 700, Primary color
+- **H2**: 2rem (mobile) / 2.5rem (desktop), Inter 600, Primary color
+- **H3**: 1.875rem, Inter 600, Primary color
+- **Body Large**: 1.125rem, Inter 400, Neutral color (project descriptions)
+- **Body**: 1rem, Inter 400, Neutral color (standard text)
+- **Small**: 0.875rem, Inter 400, Neutral color (captions, metadata)
+
+### Component Design System
+
+**Button Styles**:
+
+- **Primary**: Blue background (`bg-secondary`), white text, rounded corners
+- **Secondary**: Blue border (`border-secondary`), blue text, transparent background
+- **Elegant**: Subtle blue border/background, hover animations, used for navigation
+
+**Card System**:
+
+- **Surface background** with subtle border
+- **Rounded corners** (0.75rem)
+- **Soft shadows** with hover elevation
+- **Hover effects**: Scale transform (1.02-1.03) and enhanced shadows
+
+**Interactive Elements**:
+
+- **Smooth transitions** (300ms ease-in-out)
+- **Hover states**: Color changes, elevation, subtle scale
+- **Focus states**: Outline for accessibility
+- **Active states**: Slight scale reduction for tactile feedback
+
+### Spacing & Layout System
+
+**Section Spacing** (Optimized for modern, compact feel):
+
+- **Section Padding**: `py-16` (64px vertical) - Reduced from original 96px
+- **Header Margins**: `mb-12` (48px) - Reduced from original 80px
+- **Content Spacing**: `space-y-8` (32px between elements)
+- **Component Margins**: `mt-12` (48px) - Consistent spacing
+
+**Container System**:
+
+- **Max Width**: 7xl (80rem) for full-width sections
+- **Constrained**: 4xl-6xl (56-72rem) for readable content
+- **Horizontal Padding**: Responsive (px-4 sm:px-6 lg:px-8)
+
+### Visual Effects & Interactions
+
+**Particles.js Background**:
+
+- **Color**: Matches secondary theme color
+- **Animation**: Subtle movement, low opacity (0.5)
+- **Interactivity**: Hover repulsion, click attraction
+- **Performance**: Optimized for 60fps, minimal CPU usage
+
+**Micro-Interactions**:
+
+- **Card Hover**: Smooth elevation and scale with blue border accent
+- **Button Hover**: Color transitions with subtle shadow
+- **Navigation**: Smooth scroll without URL fragments
+- **Theme Toggle**: Animated switch with color transitions
+
+**Accessibility Features**:
+
+- **WCAG 2.1 AA** compliant color contrast ratios
+- **Keyboard navigation** support for all interactive elements
+- **Focus indicators** clearly visible in both themes
+- **Screen reader** optimized with proper ARIA labels
 
 ---
 
@@ -155,22 +227,33 @@ Create a developer-first portfolio that showcases complex system engineering pro
 
 ### Data Architecture
 
+**Simplified Project Data Model**:
+
+```go
+type ProjectDetail struct {
+    Project                *Project  // Basic project info from GitHub
+    DetailedDescription    string    // Comprehensive narrative content
+    ArchitectureDiagramURL string    // Optional system diagram
+}
 ```
-GitHub Repository Structure:
-portfolio-content/
-├── projects/
-│   ├── ascentio.md              # Frontmatter + detailed content
-│   ├── redis-implementation.md
-│   ├── order-fulfillment.md
-│   └── weather-system.md
-├── data/
-│   ├── skills.json             # Technical skills matrix
-│   ├── experience.json         # Professional timeline
-│   └── featured.json           # Homepage configuration
-└── assets/
-    ├── diagrams/               # Architecture SVGs
-    └── screenshots/            # Project visuals
+
+**Content Structure**:
+
 ```
+static/
+├── images/
+│   ├── diagrams/               # Architecture SVGs
+│   │   ├── ascentio-architecture.svg
+│   │   ├── url-shortener-architecture.svg
+│   │   └── order-fulfillment-architecture.svg
+│   └── profile.jpeg           # Professional headshot
+├── css/
+│   └── theme.css              # Design system implementation
+└── js/
+    └── main.js                # Navigation and interactions
+```
+
+**Design Rationale**: Moved from complex markdown-based content management to streamlined in-code data definition for better maintainability and performance.
 
 ### Performance Requirements
 
@@ -208,20 +291,26 @@ portfolio-content/
 
 ### Project Detail Experience
 
-**Architecture-First Approach**:
+**Simplified, Focused Approach**:
 
-- Lead with system architecture diagram
-- Problem statement → Solution approach → Implementation highlights → Results
-- Tabbed interface: Overview, Architecture, Implementation, Results
-- Code snippets with syntax highlighting
-- Performance metrics and impact statements
+- **Architecture Diagram**: Lead with system architecture visualization when available
+- **Comprehensive Description**: Single, flowing narrative covering problem, solution, implementation, and results
+- **Clean Navigation**: Elegant "Back to Projects" button with cross-page scroll functionality
+- **Streamlined Content**: Focused on essential information without redundant sections
 
-**Navigation**:
+**Navigation Design**:
 
-- Sticky header with smooth scroll navigation
-- Breadcrumb trails for deep project pages
-- "Next Project" recommendations
-- GitHub repository quick-access throughout
+- **Smart Cross-Page Navigation**: Seamless return to homepage projects section without URL fragments
+- **Breadcrumb Trails**: Clear path indication (Home / Project Title)
+- **GitHub Integration**: Direct repository access throughout project details
+- **Mobile-Optimized**: Consistent experience across all device sizes
+
+**Content Structure** (Simplified from complex multi-section approach):
+
+- **Hero Section**: Project title, description, and technology stack
+- **Architecture Overview**: System diagram with technical explanation
+- **Detailed Description**: Comprehensive narrative combining all aspects
+- **Action Links**: GitHub repository and live demo access
 
 ### Responsive Design
 
@@ -246,8 +335,9 @@ portfolio-content/
 
 - **Skill Cards**: Hover to reveal proficiency details and project usage
 - **Project Cards**: Smooth state transitions and progressive disclosure
-- **Navigation**: Mobile menu toggle, smooth scroll behaviors
-- **Form Validation**: Real-time input validation and user feedback
+- **Smart Navigation**: Cross-page section navigation without URL fragments
+- **Mobile Menu**: Smooth toggle animations with consistent styling
+- **Theme Toggle**: Seamless dark/light mode switching with persistence
 
 ### GitHub Integration Features
 
@@ -364,9 +454,3 @@ portfolio/
 - **Platform Independence**: Content structure supports easy migration
 - **Backup Strategy**: Git-based content with multiple hosting options
 - **Cost Management**: Cloud Run's pay-per-use model with spending alerts
-
----
-
-*Document Version: 1.0*
-*Last Updated: June 8, 2025*
-*Next Review: July 8, 2025*
