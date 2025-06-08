@@ -4,16 +4,15 @@
 [![Go Version](https://img.shields.io/badge/Go-1.24.2-00ADD8?style=flat&logo=go)](https://go.dev/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-A modern, performance-focused portfolio website built with Go, designed to showcase expertise in distributed systems, backend engineering, and systems programming.
+A modern, modular portfolio website built with Go.
 
 ## 🎯 Overview
 
-This portfolio website serves as a professional showcase for:
+A portfolio website designed to showcase:
 
-- **4-5 Key Engineering Projects**: Including Ascentio, Redis implementation, Order Fulfillment system, and Weather microservices
-- **Technical Deep-Dives**: Detailed case studies with architecture diagrams and performance metrics
-- **Professional Background**: Experience, skills, and contributions to open-source
-- **Technical Writing**: Blog section for sharing insights (planned)
+- **Projects**: Key engineering work and technical achievements
+- **Experience**: Professional background and skills
+- **Writing**: Technical articles and insights
 
 ## 🛠️ Technology Stack
 
@@ -26,9 +25,9 @@ This portfolio website serves as a professional showcase for:
 
 ### Frontend
 
-- **UI Library**: HTMX for dynamic interactions
-- **JavaScript**: Alpine.js for lightweight reactivity
-- **Styling**:` Tailwind CSS
+- **UI Library**: HTMX
+- **JavaScript**: Alpine.js
+- **Styling**: Tailwind CSS
 - **Build Tools**: ESBuild
 
 ## 📁 Project Structure
@@ -43,7 +42,7 @@ website/
 │   ├── router/          # HTTP routing setup
 │   ├── handlers/        # Request handlers
 │   ├── middleware/      # HTTP middleware
-│   ├── services/        # Business logic (GitHub API, caching)
+│   ├── services/        # Business logic
 │   └── models/          # Data structures
 ├── web/                 # Frontend assets
 │   ├── templates/       # HTML templates
