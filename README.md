@@ -93,6 +93,8 @@ website/
 
 ### Available Make Commands
 
+**Application Management:**
+
 | Command | Description |
 |---------|-------------|
 | `make up` | Start the application in development mode |
@@ -100,10 +102,26 @@ website/
 | `make logs` | View application logs |
 | `make shell` | Access container shell |
 | `make build` | Build Docker image |
-| `make format` | Format Go code |
-| `make deps-install` | Install/update dependencies |
 | `make restart` | Restart the application |
 | `make clean` | Remove all containers and images |
+
+**Development Tools:**
+
+| Command | Description |
+|---------|-------------|
+| `make format` | Format Go code |
+| `make deps-install` | Install/update dependencies |
+| `make lint` | Run linters (gofmt and go vet) |
+| `make check` | Run all checks (lint + test) |
+
+**Testing:**
+
+| Command | Description |
+|---------|-------------|
+| `make test` | Run all tests |
+| `make test-short` | Run short tests only |
+| `make test-race` | Run tests with race detection |
+| `make test-specific TEST=TestName` | Run specific test by name |
 
 ## 🔧 Configuration
 
@@ -140,13 +158,32 @@ The application follows a clean architecture pattern with dependency injection
 - **Graceful Shutdown**: Proper signal handling for zero-downtime deployments
 - **Structured Logging**: Consistent, queryable logs with Zerolog
 
+## 🧪 Testing
+
+The project includes comprehensive unit tests for all major components:
+
+- **Services**: Business logic and service orchestration
+- **Handlers**: HTTP request handling and validation
+- **Repositories**: Data access layer implementations
+- **Client**: External API interactions
+- **Router**: Middleware and routing setup
+- **App**: Application lifecycle management
+
+Run tests locally with:
+
+```bash
+make test              # Run all tests
+make test-race         # Run with race detection
+make test-short        # Run short tests only
+```
+
 ## 🚦 CI/CD
 
 The project uses GitHub Actions for continuous integration:
 
 - **Build**: Verifies Docker image builds successfully
 - **Lint**: Checks code formatting and runs `go vet`
-- **Test**: Runs unit and integration tests
+- **Test**: Runs unit tests
 
 ## 📄 License
 

@@ -48,9 +48,29 @@ jobs:
       - name: Run go vet
         run: docker compose exec app go vet ./...
 
+  test:
+    name: Test
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: docker compose build app
+
+      - name: Create app container
+        run: docker compose up -d app
+
+      - name: Run tests
+        run: docker compose exec app go test ./... -v
+
   summary:
     name: CI Summary
-    needs: [build, lint]
+    needs: [build, lint, test]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -62,6 +82,10 @@ jobs:
           fi
           if [[ "${{ needs.lint.result }}" != "success" ]]; then
             echo "Lint job failed"
+            exit 1
+          fi
+          if [[ "${{ needs.test.result }}" != "success" ]]; then
+            echo "Test job failed"
             exit 1
           fi
           echo "All checks passed successfully!"
