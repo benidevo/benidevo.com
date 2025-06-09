@@ -15,14 +15,20 @@ type GitHubSkillRepository struct {
 	cfg             *config.GitHubConfig
 	githubClient    *client.GitHubClient
 	skillCategories []models.SkillCategory // Cache for skill categories
+	initialized     bool                   // Track initialization status
 }
 
 // NewGitHubSkillRepository creates a new GitHub-based skill repository
 func NewGitHubSkillRepository(cfg *config.GitHubConfig) *GitHubSkillRepository {
-	return &GitHubSkillRepository{
+	repo := &GitHubSkillRepository{
 		cfg:          cfg,
 		githubClient: client.NewGitHubClient(cfg),
+		initialized:  false,
 	}
+
+	go repo.InitializeAsync()
+
+	return repo
 }
 
 // GetSkillCategories returns all skill categories
@@ -36,13 +42,28 @@ func (r *GitHubSkillRepository) GetSkillCategories() ([]models.SkillCategory, er
 	return categories, nil
 }
 
+// InitializeAsync loads skills asynchronously in the background
+func (r *GitHubSkillRepository) InitializeAsync() {
+	if err := r.loadSkills(); err != nil {
+		log.Error().Err(err).Msg("Failed to load skills asynchronously")
+	} else {
+		r.initialized = true
+		log.Info().Msg("Skills loaded asynchronously")
+	}
+}
+
 // ensureSkillsLoaded loads skills from GitHub if not already loaded
 func (r *GitHubSkillRepository) ensureSkillsLoaded() error {
 	if len(r.skillCategories) > 0 {
 		return nil
 	}
 
-	return r.loadSkills()
+	if !r.initialized {
+		log.Warn().Msg("Skills not loaded asynchronously, loading synchronously")
+		return r.loadSkills()
+	}
+
+	return nil
 }
 
 // loadSkills fetches and loads skills from GitHub

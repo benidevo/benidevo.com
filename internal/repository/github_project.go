@@ -21,11 +21,15 @@ type GitHubProjectRepository struct {
 
 // NewGitHubProjectRepository creates a new GitHub-based project repository
 func NewGitHubProjectRepository(cfg *config.GitHubConfig, techRepo TechnologyRepository) *GitHubProjectRepository {
-	return &GitHubProjectRepository{
+	repo := &GitHubProjectRepository{
 		cfg:          cfg,
 		githubClient: client.NewGitHubClient(cfg),
 		techRepo:     techRepo,
 	}
+
+	go repo.PrewarmCache()
+
+	return repo
 }
 
 // GetAllProjects fetches all projects from GitHub repository
@@ -77,6 +81,16 @@ func (r *GitHubProjectRepository) fetchProjectsData() (*models.ProjectsResponse,
 	}
 
 	return &projectsResponse, nil
+}
+
+// PrewarmCache loads project data asynchronously to warm up the cache
+func (r *GitHubProjectRepository) PrewarmCache() {
+	log.Info().Msg("Pre-warming project cache asynchronously")
+	if _, err := r.GetAllProjects(); err != nil {
+		log.Error().Err(err).Msg("Failed to pre-warm project cache")
+	} else {
+		log.Info().Msg("Project cache pre-warmed successfully")
+	}
 }
 
 // fetchDetailedDescription fetches the detailed description markdown file

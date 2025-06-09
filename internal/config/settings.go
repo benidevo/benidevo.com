@@ -1,6 +1,11 @@
 package config
 
-import "os"
+import (
+	"os"
+
+	"github.com/joho/godotenv"
+	"github.com/rs/zerolog/log"
+)
 
 type Settings struct {
 	Port          string       `json:"port" env:"PORT" default:"8080"`
@@ -17,6 +22,10 @@ type GitHubConfig struct {
 }
 
 func NewSettings() *Settings {
+	if err := godotenv.Load(); err != nil {
+		log.Debug().Err(err).Msg("No .env file found... \nusing environment variables only")
+	}
+
 	return &Settings{
 		Port:          getEnv("PORT", "8080"),
 		IsDevelopment: getEnv("IS_DEVELOPMENT", "true") == "true",

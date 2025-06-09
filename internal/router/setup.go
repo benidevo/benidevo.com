@@ -82,12 +82,17 @@ func SetupRoutes(cfg *config.Settings) *gin.Engine {
 	var skillRepo repository.SkillRepository
 
 	if cfg.GitHub.Owner != "" && cfg.GitHub.Repository != "" {
-		log.Info().Msg("Using GitHub repositories for data")
+		log.Info().
+			Str("owner", cfg.GitHub.Owner).
+			Str("repository", cfg.GitHub.Repository).
+			Str("baseURL", cfg.GitHub.BaseURL).
+			Bool("hasToken", cfg.GitHub.Token != "").
+			Msg("Using GitHub repositories for data")
 		techRepo = repository.NewGitHubTechnologyRepository(&cfg.GitHub)
 		projectRepo = repository.NewGitHubProjectRepository(&cfg.GitHub, techRepo)
 		skillRepo = repository.NewGitHubSkillRepository(&cfg.GitHub)
 	} else {
-		log.Info().Msg("Using in-memory repositories for data")
+		log.Info().Msg("Using in-memory repositories for data - GitHub owner/repository not configured")
 		techRepo = repository.NewInMemoryTechnologyRepository()
 		projectRepo = repository.NewInMemoryProjectRepository(techRepo)
 		skillRepo = repository.NewInMemorySkillRepository(techRepo)

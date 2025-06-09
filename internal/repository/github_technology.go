@@ -15,15 +15,21 @@ type GitHubTechnologyRepository struct {
 	cfg          *config.GitHubConfig
 	githubClient *client.GitHubClient
 	technologies map[string]models.Technology // Cache for technologies
+	initialized  bool                         // Track initialization status
 }
 
 // NewGitHubTechnologyRepository creates a new GitHub-based technology repository
 func NewGitHubTechnologyRepository(cfg *config.GitHubConfig) *GitHubTechnologyRepository {
-	return &GitHubTechnologyRepository{
+	repo := &GitHubTechnologyRepository{
 		cfg:          cfg,
 		githubClient: client.NewGitHubClient(cfg),
 		technologies: make(map[string]models.Technology),
+		initialized:  false,
 	}
+
+	go repo.InitializeAsync()
+
+	return repo
 }
 
 // GetTechnology returns a technology by name
@@ -68,13 +74,28 @@ func (r *GitHubTechnologyRepository) GetAllTechnologies() (map[string]models.Tec
 	return result, nil
 }
 
+// InitializeAsync loads technologies asynchronously in the background
+func (r *GitHubTechnologyRepository) InitializeAsync() {
+	if err := r.loadTechnologies(); err != nil {
+		log.Error().Err(err).Msg("Failed to load technologies asynchronously")
+	} else {
+		r.initialized = true
+		log.Info().Msg("Technologies loaded asynchronously")
+	}
+}
+
 // ensureTechnologiesLoaded loads technologies from GitHub if not already loaded
 func (r *GitHubTechnologyRepository) ensureTechnologiesLoaded() error {
 	if len(r.technologies) > 0 {
 		return nil // Already loaded
 	}
 
-	return r.loadTechnologies()
+	if !r.initialized {
+		log.Warn().Msg("Technologies not loaded asynchronously, loading synchronously")
+		return r.loadTechnologies()
+	}
+
+	return nil
 }
 
 // loadTechnologies fetches and loads technologies from GitHub

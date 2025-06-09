@@ -6,15 +6,25 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/benidevo/website/internal/config"
 )
 
+// CacheEntry represents a cached file with expiration
+type CacheEntry struct {
+	Content   string
+	ExpiresAt time.Time
+}
+
 // GitHubClient provides common GitHub API functionality
 type GitHubClient struct {
 	cfg        *config.GitHubConfig
 	httpClient *http.Client
+	cache      map[string]CacheEntry
+	cacheMutex sync.RWMutex
+	cacheTTL   time.Duration
 }
 
 // HTTPClient returns the HTTP client for external use
@@ -38,11 +48,21 @@ func NewGitHubClient(cfg *config.GitHubConfig) *GitHubClient {
 		httpClient: &http.Client{
 			Timeout: 30 * time.Second,
 		},
+		cache:    make(map[string]CacheEntry),
+		cacheTTL: 15 * time.Minute, // Cache for 15 minutes
 	}
 }
 
-// FetchFileContent fetches and decodes file content from GitHub repository
+// FetchFileContent fetches and decodes file content from GitHub repository with caching
 func (c *GitHubClient) FetchFileContent(filePath string) (string, error) {
+	c.cacheMutex.RLock()
+	entry, exists := c.cache[filePath]
+	c.cacheMutex.RUnlock()
+
+	if exists && time.Now().Before(entry.ExpiresAt) {
+		return entry.Content, nil
+	}
+
 	url := fmt.Sprintf("%s/repos/%s/%s/contents/%s",
 		c.cfg.BaseURL, c.cfg.Owner, c.cfg.Repository, filePath)
 
@@ -51,7 +71,19 @@ func (c *GitHubClient) FetchFileContent(filePath string) (string, error) {
 		return "", err
 	}
 
-	return c.decodeFileContent(file)
+	content, err := c.decodeFileContent(file)
+	if err != nil {
+		return "", err
+	}
+
+	c.cacheMutex.Lock()
+	c.cache[filePath] = CacheEntry{
+		Content:   content,
+		ExpiresAt: time.Now().Add(c.cacheTTL),
+	}
+	c.cacheMutex.Unlock()
+
+	return content, nil
 }
 
 // fetchGitHubFile makes a request to GitHub API and returns the file data
@@ -132,6 +164,19 @@ func (c *GitHubClient) FetchRepositoryData(owner, repo string) ([]byte, error) {
 	}
 
 	return io.ReadAll(resp.Body)
+}
+
+// ClearExpiredCache removes expired entries from cache
+func (c *GitHubClient) ClearExpiredCache() {
+	c.cacheMutex.Lock()
+	defer c.cacheMutex.Unlock()
+
+	now := time.Now()
+	for key, entry := range c.cache {
+		if now.After(entry.ExpiresAt) {
+			delete(c.cache, key)
+		}
+	}
 }
 
 // removeWhitespace removes all whitespace characters from a string
