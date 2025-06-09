@@ -572,6 +572,20 @@
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-md);
   }
+
+  /* Mobile-specific architecture diagram styles */
+  @media (max-width: 640px) {
+    .architecture-diagram {
+      padding: 0.5rem;
+      overflow: hidden;
+    }
+    
+    .architecture-diagram img {
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+    }
+  }
   
   /* Navigation buttons for project detail pages */
   .project-nav {

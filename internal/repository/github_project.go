@@ -121,11 +121,11 @@ func (r *GitHubProjectRepository) convertToProject(data models.ProjectData) (*mo
 	}
 
 	if data.ArchitectureDiagramURL != "" {
-		// Extract filename from URL (e.g., "ascentio-architecture.svg" from the URL)
+		// Extract filename from URL (e.g., "project-architecture.jpg" from the URL)
 		parts := strings.Split(data.ArchitectureDiagramURL, "/")
 		if len(parts) > 0 {
 			filename := parts[len(parts)-1]
-			content, err := r.githubClient.FetchFileContent(fmt.Sprintf("assets/diagrams/%s", filename))
+			content, err := r.githubClient.FetchBinaryFileContent(fmt.Sprintf("assets/diagrams/%s", filename))
 			if err != nil {
 				log.Warn().Err(err).Str("diagram", filename).Msg("Failed to fetch architecture diagram")
 			} else {

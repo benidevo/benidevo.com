@@ -133,6 +133,40 @@ func (c *GitHubClient) decodeFileContent(file *GitHubFile) (string, error) {
 	return string(decoded), nil
 }
 
+// FetchBinaryFileContent fetches binary file content from GitHub repository and returns base64 string
+func (c *GitHubClient) FetchBinaryFileContent(filePath string) (string, error) {
+	c.cacheMutex.RLock()
+	entry, exists := c.cache[filePath]
+	c.cacheMutex.RUnlock()
+
+	if exists && time.Now().Before(entry.ExpiresAt) {
+		return entry.Content, nil
+	}
+
+	url := fmt.Sprintf("%s/repos/%s/%s/contents/%s",
+		c.cfg.BaseURL, c.cfg.Owner, c.cfg.Repository, filePath)
+
+	file, err := c.fetchGitHubFile(url)
+	if err != nil {
+		return "", err
+	}
+
+	if file.Encoding != "base64" {
+		return "", fmt.Errorf("unsupported encoding for binary file: %s", file.Encoding)
+	}
+
+	content := removeWhitespace(file.Content)
+
+	c.cacheMutex.Lock()
+	c.cache[filePath] = CacheEntry{
+		Content:   content,
+		ExpiresAt: time.Now().Add(c.cacheTTL),
+	}
+	c.cacheMutex.Unlock()
+
+	return content, nil
+}
+
 // ClearExpiredCache removes expired entries from cache
 func (c *GitHubClient) ClearExpiredCache() {
 	c.cacheMutex.Lock()
