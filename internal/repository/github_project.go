@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
-	"time"
 
 	"github.com/benidevo/website/internal/client"
 	"github.com/benidevo/website/internal/config"
@@ -103,20 +102,12 @@ func (r *GitHubProjectRepository) convertToProject(data models.ProjectData) (*mo
 	detailedDescription, err := r.fetchDetailedDescription(data.DetailedDescriptionFile)
 	if err != nil {
 		log.Warn().Err(err).Str("file", data.DetailedDescriptionFile).Msg("Failed to fetch detailed description")
-		detailedDescription = data.Description // Fallback to basic description
+		detailedDescription = data.Description
 	}
 
 	technologies := r.techRepo.GetTechnologies(data.Technologies)
 
-	// Parse last updated time
-	var lastUpdated time.Time
-	if data.LastUpdated != "" {
-		if parsed, err := time.Parse(time.RFC3339, data.LastUpdated); err == nil {
-			lastUpdated = parsed
-		}
-	}
-
-	return &models.Project{
+	project := &models.Project{
 		ID:                     data.ID,
 		Title:                  data.Title,
 		Description:            data.Description,
@@ -125,73 +116,23 @@ func (r *GitHubProjectRepository) convertToProject(data models.ProjectData) (*mo
 		GitHubURL:              data.GitHubURL,
 		LiveURL:                data.LiveURL,
 		Language:               data.Language,
-		Stars:                  data.Stars,
-		Forks:                  data.Forks,
-		LastUpdated:            data.LastUpdated,
 		Technologies:           technologies,
 		Featured:               data.Featured,
-		UpdatedAt:              lastUpdated,
-	}, nil
-}
-
-// EnrichWithGitHubData fetches live data from GitHub API for a repository
-func (r *GitHubProjectRepository) EnrichWithGitHubData(project *models.Project) error {
-	if project.GitHubURL == "" {
-		return nil // No GitHub URL, nothing to enrich
 	}
 
-	// Extract owner and repo from GitHub URL
-	owner, repo, err := r.parseGitHubURL(project.GitHubURL)
-	if err != nil {
-		return fmt.Errorf("failed to parse GitHub URL: %w", err)
+	if data.ArchitectureDiagramURL != "" {
+		// Extract filename from URL (e.g., "ascentio-architecture.svg" from the URL)
+		parts := strings.Split(data.ArchitectureDiagramURL, "/")
+		if len(parts) > 0 {
+			filename := parts[len(parts)-1]
+			content, err := r.githubClient.FetchFileContent(fmt.Sprintf("assets/diagrams/%s", filename))
+			if err != nil {
+				log.Warn().Err(err).Str("diagram", filename).Msg("Failed to fetch architecture diagram")
+			} else {
+				project.ArchitectureDiagramContent = content
+			}
+		}
 	}
 
-	// Fetch repository data from GitHub API
-	repoData, err := r.fetchGitHubRepoData(owner, repo)
-	if err != nil {
-		log.Warn().Err(err).Str("repo", project.GitHubURL).Msg("Failed to fetch GitHub repository data")
-		return nil // Don't fail the entire operation, just log the warning
-	}
-
-	// Update project with live data
-	project.Stars = repoData.StargazersCount
-	project.Forks = repoData.ForksCount
-	if !repoData.UpdatedAt.IsZero() {
-		project.LastUpdated = repoData.UpdatedAt.Format(time.RFC3339)
-		project.UpdatedAt = repoData.UpdatedAt
-	}
-
-	return nil
-}
-
-// parseGitHubURL extracts owner and repository name from GitHub URL
-//
-// githubURL format: https://github.com/owner/repo
-func (r *GitHubProjectRepository) parseGitHubURL(githubURL string) (string, string, error) {
-	githubURL = strings.TrimSuffix(githubURL, "/")
-	parts := strings.Split(githubURL, "/")
-
-	if len(parts) < 2 {
-		return "", "", fmt.Errorf("invalid GitHub URL format: %s", githubURL)
-	}
-
-	repo := parts[len(parts)-1]
-	owner := parts[len(parts)-2]
-
-	return owner, repo, nil
-}
-
-// fetchGitHubRepoData fetches repository metadata from GitHub API
-func (r *GitHubProjectRepository) fetchGitHubRepoData(owner, repo string) (*models.GitHubRepository, error) {
-	data, err := r.githubClient.FetchRepositoryData(owner, repo)
-	if err != nil {
-		return nil, err
-	}
-
-	var repoData models.GitHubRepository
-	if err := json.Unmarshal(data, &repoData); err != nil {
-		return nil, fmt.Errorf("failed to decode repository data: %w", err)
-	}
-
-	return &repoData, nil
+	return project, nil
 }

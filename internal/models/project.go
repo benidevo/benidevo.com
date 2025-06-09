@@ -1,9 +1,5 @@
 package models
 
-import (
-	"time"
-)
-
 // Technology represents a technology with its icon
 type Technology struct {
 	Name string `json:"name"`
@@ -12,42 +8,30 @@ type Technology struct {
 
 // Project represents a software project
 type Project struct {
-	ID                     int          `json:"id"`
-	Title                  string       `json:"title"`
-	Description            string       `json:"description"`
-	DetailedDescription    string       `json:"detailed_description"`
-	ArchitectureDiagramURL string       `json:"architecture_diagram_url,omitempty"`
-	GitHubURL              string       `json:"github_url"`
-	LiveURL                string       `json:"live_url,omitempty"`
-	Language               string       `json:"language"`
-	Stars                  int          `json:"stars"`
-	Forks                  int          `json:"forks"`
-	LastUpdated            string       `json:"last_updated"`
-	Technologies           []Technology `json:"technologies"`
-	Featured               bool         `json:"featured"`
-	UpdatedAt              time.Time    `json:"updated_at"`
+	ID                         int          `json:"id"`
+	Title                      string       `json:"title"`
+	Description                string       `json:"description"`
+	DetailedDescription        string       `json:"detailed_description"`
+	ArchitectureDiagramURL     string       `json:"architecture_diagram_url,omitempty"`
+	ArchitectureDiagramContent string       `json:"architecture_diagram_content,omitempty"`
+	GitHubURL                  string       `json:"github_url"`
+	LiveURL                    string       `json:"live_url,omitempty"`
+	Language                   string       `json:"language"`
+	Technologies               []Technology `json:"technologies"`
+	Featured                   bool         `json:"featured"`
 }
 
-// Skill represents a technical skill with proficiency level
+// Skill represents a technical skill
 type Skill struct {
-	Name        string `json:"name"`
-	Icon        string `json:"icon"`
-	Proficiency int    `json:"proficiency"` // 0-100
-	Years       int    `json:"years"`
-	Category    string `json:"category"`
+	Name     string `json:"name"`
+	Icon     string `json:"icon"`
+	Category string `json:"category"`
 }
 
 // SkillCategory groups skills by category
 type SkillCategory struct {
 	Category string  `json:"category"`
 	Skills   []Skill `json:"skills"`
-}
-
-// GitHubRepository represents data from GitHub API
-type GitHubRepository struct {
-	StargazersCount int       `json:"stargazers_count"`
-	ForksCount      int       `json:"forks_count"`
-	UpdatedAt       time.Time `json:"updated_at"`
 }
 
 // ProjectDetailPageData represents all data needed for a project detail page
@@ -77,9 +61,6 @@ type ProjectData struct {
 	GitHubURL               string   `json:"github_url"`
 	LiveURL                 string   `json:"live_url"`
 	Language                string   `json:"language"`
-	Stars                   int      `json:"stars"`
-	Forks                   int      `json:"forks"`
-	LastUpdated             string   `json:"last_updated"`
 	Technologies            []string `json:"technologies"`
 	Featured                bool     `json:"featured"`
 	ArchitectureDiagramURL  string   `json:"architecture_diagram_url"`

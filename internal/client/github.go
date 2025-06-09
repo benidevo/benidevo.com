@@ -133,36 +133,6 @@ func (c *GitHubClient) decodeFileContent(file *GitHubFile) (string, error) {
 	return string(decoded), nil
 }
 
-// FetchRepositoryData fetches repository metadata from GitHub API
-func (c *GitHubClient) FetchRepositoryData(owner, repo string) ([]byte, error) {
-	url := fmt.Sprintf("%s/repos/%s/%s", c.cfg.BaseURL, owner, repo)
-
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create request: %w", err)
-	}
-
-	// Add authentication if token is provided
-	if c.cfg.Token != "" {
-		req.Header.Set("Authorization", "token "+c.cfg.Token)
-	}
-	req.Header.Set("Accept", "application/vnd.github.v3+json")
-	req.Header.Set("User-Agent", "Portfolio-Website/1.0")
-
-	resp, err := c.httpClient.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("failed to fetch repository data: %w", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(resp.Body)
-		return nil, fmt.Errorf("GitHub API returned status %d: %s", resp.StatusCode, string(body))
-	}
-
-	return io.ReadAll(resp.Body)
-}
-
 // ClearExpiredCache removes expired entries from cache
 func (c *GitHubClient) ClearExpiredCache() {
 	c.cacheMutex.Lock()

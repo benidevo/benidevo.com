@@ -47,6 +47,9 @@ func createMultiTemplateRenderer() multitemplate.Renderer {
 			html := blackfriday.Run([]byte(text))
 			return template.HTML(html)
 		},
+		"safeHTML": func(text string) template.HTML {
+			return template.HTML(text)
+		},
 	}
 
 	// Create templates with base layout, partials, and page content
