@@ -40,8 +40,8 @@ func (h *ProjectHandler) GetProjectDetail(c *gin.Context) {
 
 	log.Info().Int("project_id", projectID).Msg("Fetching project details")
 
-	projectDetail := h.projectService.GetProjectDetail(projectID)
-	if projectDetail == nil {
+	project := h.projectService.GetProjectByID(projectID)
+	if project == nil {
 		log.Warn().Int("project_id", projectID).Msg("Project not found")
 		c.HTML(http.StatusNotFound, "404", gin.H{
 			"Title":       "Project Not Found",
@@ -52,11 +52,11 @@ func (h *ProjectHandler) GetProjectDetail(c *gin.Context) {
 	}
 
 	data := models.ProjectDetailPageData{
-		Title:         projectDetail.Project.Title,
-		Description:   projectDetail.Project.Description,
-		CanonicalURL:  c.Request.URL.String(),
-		CurrentYear:   time.Now().Year(),
-		ProjectDetail: projectDetail,
+		Title:        project.Title,
+		Description:  project.Description,
+		CanonicalURL: c.Request.URL.String(),
+		CurrentYear:  time.Now().Year(),
+		Project:      project,
 	}
 
 	c.HTML(http.StatusOK, "project_detail", data)
@@ -74,14 +74,14 @@ func (h *ProjectHandler) GetProjectDetailFragment(c *gin.Context) {
 
 	log.Info().Int("project_id", projectID).Msg("Fetching project detail fragment")
 
-	projectDetail := h.projectService.GetProjectDetail(projectID)
-	if projectDetail == nil {
+	project := h.projectService.GetProjectByID(projectID)
+	if project == nil {
 		log.Warn().Int("project_id", projectID).Msg("Project not found for fragment")
 		c.String(http.StatusNotFound, "Project not found")
 		return
 	}
 
 	c.HTML(http.StatusOK, "project_detail_fragment.html", gin.H{
-		"ProjectDetail": projectDetail,
+		"Project": project,
 	})
 }

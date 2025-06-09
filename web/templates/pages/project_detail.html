@@ -8,19 +8,19 @@
                         <ol class="flex items-center space-x-2 text-sm text-neutral">
                             <li><a href="/" class="hover:text-secondary transition-colors">Home</a></li>
                             <li><span class="text-neutral/50">/</span></li>
-                            <li><span class="text-primary">{{.ProjectDetail.Project.Title}}</span></li>
+                            <li><span class="text-primary">{{.Project.Title}}</span></li>
                         </ol>
                     </nav>
 
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
                         <!-- Project Info -->
                         <div class="lg:col-span-2">
-                            <h1 class="text-h1 text-primary mb-6">{{.ProjectDetail.Project.Title}}</h1>
-                            <p class="text-xl text-neutral mb-8 leading-relaxed">{{.ProjectDetail.Project.Description}}</p>
+                            <h1 class="text-h1 text-primary mb-6">{{.Project.Title}}</h1>
+                            <p class="text-xl text-neutral mb-8 leading-relaxed">{{.Project.Description}}</p>
                             
                             <!-- Tech Stack -->
                             <div class="flex flex-wrap gap-2 mb-8">
-                                {{range .ProjectDetail.Project.Technologies}}
+                                {{range .Project.Technologies}}
                                 <span class="tech-badge-with-icon">
                                     <span class="tech-icon">
                                         <img src="{{.Icon}}" alt="{{.Name}}" loading="lazy">
@@ -36,8 +36,8 @@
                             <div class="card p-6" style="background: var(--color-surface); border: 1px solid rgba(100, 116, 139, 0.1);">
                                 <h3 class="text-lg font-semibold text-primary mb-4">Project Links</h3>
                                 <div class="space-y-2">
-                                    {{if .ProjectDetail.Project.LiveURL}}
-                                    <a href="{{.ProjectDetail.Project.LiveURL}}" 
+                                    {{if .Project.LiveURL}}
+                                    <a href="{{.Project.LiveURL}}" 
                                        target="_blank" rel="noopener noreferrer"
                                        class="flex items-center gap-3 px-4 py-3 rounded-lg border border-accent/20 text-accent hover:bg-accent/5 hover:border-accent/40 transition-all duration-200">
                                         <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -46,7 +46,7 @@
                                         <span class="font-medium">Live Demo</span>
                                     </a>
                                     {{end}}
-                                    <a href="{{.ProjectDetail.Project.GitHubURL}}" 
+                                    <a href="{{.Project.GitHubURL}}" 
                                        target="_blank" rel="noopener noreferrer"
                                        class="flex items-center gap-3 px-4 py-3 rounded-lg border border-neutral/20 text-neutral hover:bg-neutral/5 hover:border-neutral/40 hover:text-primary transition-all duration-200">
                                         <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
@@ -62,13 +62,13 @@
             </section>
 
             <!-- Architecture Diagram -->
-            {{if .ProjectDetail.ArchitectureDiagramURL}}
+            {{if .Project.ArchitectureDiagramURL}}
             <section class="py-16 bg-surface">
                 <div class="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
                     <h2 class="text-h2 text-primary mb-8">System Architecture</h2>
                     <div class="card p-8 text-center">
-                        <img src="{{.ProjectDetail.ArchitectureDiagramURL}}" 
-                             alt="{{.ProjectDetail.Project.Title}} Architecture Diagram"
+                        <img src="{{.Project.ArchitectureDiagramURL}}" 
+                             alt="{{.Project.Title}} Architecture Diagram"
                              class="max-w-full h-auto mx-auto rounded-lg shadow-lg"
                              loading="lazy">
                         <p class="text-sm text-neutral mt-4">System Architecture Overview</p>
@@ -82,7 +82,7 @@
                 <div class="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
                     <h2 class="text-h2 text-primary mb-8">About This Project</h2>
                     <div class="prose prose-lg max-w-none">
-                        <div class="text-neutral leading-relaxed whitespace-pre-line">{{.ProjectDetail.DetailedDescription}}</div>
+                        <div class="text-neutral leading-relaxed whitespace-pre-line">{{.Project.DetailedDescription}}</div>
                     </div>
                 </div>
             </section>

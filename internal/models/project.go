@@ -10,21 +10,23 @@ type Technology struct {
 	Icon string `json:"icon"`
 }
 
-// Project represents a software project with GitHub integration
+// Project represents a software project
 type Project struct {
-	ID           int          `json:"id"`
-	Title        string       `json:"title"`
-	Description  string       `json:"description"`
-	GitHubURL    string       `json:"github_url"`
-	LiveURL      string       `json:"live_url,omitempty"`
-	Language     string       `json:"language"`
-	Stars        int          `json:"stars"`
-	Forks        int          `json:"forks"`
-	LastUpdated  string       `json:"last_updated"`
-	Technologies []Technology `json:"technologies"`
-	Featured     bool         `json:"featured"`
-	CreatedAt    time.Time    `json:"created_at"`
-	UpdatedAt    time.Time    `json:"updated_at"`
+	ID                     int          `json:"id"`
+	Title                  string       `json:"title"`
+	Description            string       `json:"description"`
+	DetailedDescription    string       `json:"detailed_description"`
+	ArchitectureDiagramURL string       `json:"architecture_diagram_url,omitempty"`
+	GitHubURL              string       `json:"github_url"`
+	LiveURL                string       `json:"live_url,omitempty"`
+	Language               string       `json:"language"`
+	Stars                  int          `json:"stars"`
+	Forks                  int          `json:"forks"`
+	LastUpdated            string       `json:"last_updated"`
+	Technologies           []Technology `json:"technologies"`
+	Featured               bool         `json:"featured"`
+	CreatedAt              time.Time    `json:"created_at"`
+	UpdatedAt              time.Time    `json:"updated_at"`
 }
 
 // Skill represents a technical skill with proficiency level
@@ -57,20 +59,13 @@ type GitHubRepository struct {
 	Private         bool      `json:"private"`
 }
 
-// ProjectDetail extends the Project with detailed information for individual project pages
-type ProjectDetail struct {
-	Project                *Project `json:"project"`
-	DetailedDescription    string   `json:"detailed_description"`
-	ArchitectureDiagramURL string   `json:"architecture_diagram_url"`
-}
-
 // ProjectDetailPageData represents all data needed for a project detail page
 type ProjectDetailPageData struct {
-	Title         string         `json:"title"`
-	Description   string         `json:"description"`
-	CanonicalURL  string         `json:"canonical_url"`
-	CurrentYear   int            `json:"current_year"`
-	ProjectDetail *ProjectDetail `json:"project_detail"`
+	Title        string   `json:"title"`
+	Description  string   `json:"description"`
+	CanonicalURL string   `json:"canonical_url"`
+	CurrentYear  int      `json:"current_year"`
+	Project      *Project `json:"project"`
 }
 
 // HomePageData represents all data needed for the home page

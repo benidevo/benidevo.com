@@ -10,6 +10,7 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/benidevo/website/internal/handlers"
+	"github.com/benidevo/website/internal/repository"
 	"github.com/benidevo/website/internal/services"
 )
 
@@ -74,7 +75,13 @@ func SetupRoutes() *gin.Engine {
 	router.HTMLRender = createMultiTemplateRenderer()
 	router.Static("/static", "./web/static")
 
-	projectService := services.NewProjectService(nil)
+	// Initialize repositories
+	techRepo := repository.NewInMemoryTechnologyRepository()
+	projectRepo := repository.NewInMemoryProjectRepository(techRepo)
+	skillRepo := repository.NewInMemorySkillRepository(techRepo)
+
+	// Initialize services
+	projectService := services.NewProjectService(projectRepo, skillRepo)
 
 	homeHandler := handlers.NewHomeHandler(projectService)
 	projectHandler := handlers.NewProjectHandler(projectService)
