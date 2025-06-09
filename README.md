@@ -28,7 +28,6 @@ A portfolio website designed to showcase:
 - **UI Library**: HTMX
 - **JavaScript**: Alpine.js
 - **Styling**: Tailwind CSS
-- **Build Tools**: ESBuild
 
 ## 📁 Project Structure
 
@@ -120,7 +119,6 @@ website/
 |---------|-------------|
 | `make test` | Run all tests |
 | `make test-short` | Run short tests only |
-| `make test-race` | Run tests with race detection |
 | `make test-specific TEST=TestName` | Run specific test by name |
 
 ## 🔧 Configuration
@@ -136,13 +134,6 @@ The application uses environment variables for configuration:
 | `GITHUB_REPOSITORY` | GitHub repository name | |
 | `GITHUB_TOKEN` | GitHub API token (optional) | |
 | `GITHUB_BASE_URL` | GitHub API base URL | `https://api.github.com` |
-
-### Data Sources
-
-The application supports two data source modes:
-
-- **GitHub Mode**: Fetches project and skill data from GitHub repository files (when `GITHUB_TOKEN` is configured)
-- **In-Memory Mode**: Uses hardcoded mock data for local development (fallback when GitHub is not configured)
 
 ## 🏗️ Architecture
 
@@ -173,7 +164,6 @@ Run tests locally with:
 
 ```bash
 make test              # Run all tests
-make test-race         # Run with race detection
 make test-short        # Run short tests only
 ```
 
@@ -187,4 +177,4 @@ The project uses GitHub Actions for continuous integration:
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

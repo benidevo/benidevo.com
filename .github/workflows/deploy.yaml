@@ -65,7 +65,7 @@ jobs:
 
           # Create unique image tag
           IMAGE_TAG="${ENVIRONMENT}-${TIMESTAMP}-${VERSION:0:8}"
-          FULL_IMAGE="${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}:${IMAGE_TAG}"
+          FULL_IMAGE="${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/portfolio-website/${{ env.SERVICE_NAME }}:${IMAGE_TAG}"
 
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
           echo "environment=${ENVIRONMENT}" >> $GITHUB_OUTPUT
