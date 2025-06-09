@@ -83,16 +83,3 @@ func (a *App) WaitForShutdown() {
 	}
 
 }
-
-func (a *App) Shutdown(ctx context.Context) error {
-	if err := a.server.Close(); err != nil {
-		log.Error().Err(err).Msg("Failed to close server")
-		return err
-	}
-
-	a.server = nil
-	a.router = nil
-	a.done = nil
-	log.Info().Msg("Server closed successfully")
-	return nil
-}

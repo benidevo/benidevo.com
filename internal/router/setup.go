@@ -5,9 +5,11 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gin-contrib/gzip"
 	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
+	"github.com/russross/blackfriday/v2"
 
 	"github.com/benidevo/website/internal/config"
 	"github.com/benidevo/website/internal/handlers"
@@ -41,6 +43,10 @@ func createMultiTemplateRenderer() multitemplate.Renderer {
 		"eq": func(a, b interface{}) bool {
 			return a == b
 		},
+		"markdown": func(text string) template.HTML {
+			html := blackfriday.Run([]byte(text))
+			return template.HTML(html)
+		},
 	}
 
 	// Create templates with base layout, partials, and page content
@@ -72,6 +78,9 @@ func createMultiTemplateRenderer() multitemplate.Renderer {
 		"web/templates/partials/footer.html",
 		"web/templates/pages/500.html")
 
+	renderer.AddFromFilesFuncs("project_detail_fragment", funcMap,
+		"web/templates/partials/project_detail_fragment.html")
+
 	return renderer
 }
 
@@ -85,19 +94,17 @@ func SetupRouter(cfg *config.Config) (*gin.Engine, error) {
 	handlers := handlers.SetupHandlers(services)
 
 	router := gin.Default()
+
 	router.Use(globalErrorHandler)
+	router.Use(compressionMiddleware())
 
 	router.HTMLRender = createMultiTemplateRenderer()
 	router.Static("/static", "./web/static")
 
-	// Setup routes with handlers
 	router.GET("/", handlers.HomeHandler.HomePage)
-
-	// Project routes
 	router.GET("/projects/:id", handlers.ProjectHandler.GetProjectDetail)
 	router.GET("/projects/:id/details", handlers.ProjectHandler.GetProjectDetailFragment)
 
-	// Health check
 	router.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"status":    "ok",
@@ -133,4 +140,12 @@ func globalErrorHandler(c *gin.Context) {
 		c.HTML(http.StatusInternalServerError, "500", nil)
 		c.Abort()
 	}
+}
+
+// compressionMiddleware returns a Gin middleware handler that applies gzip compression
+// to HTTP responses, excluding certain file extensions such as images and fonts.
+func compressionMiddleware() gin.HandlerFunc {
+	return gzip.Gzip(gzip.DefaultCompression, gzip.WithExcludedExtensions([]string{
+		".jpg", ".jpeg", ".png", ".gif", ".svg", ".ico", ".woff", ".woff2",
+	}))
 }

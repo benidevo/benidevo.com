@@ -45,17 +45,9 @@ type SkillCategory struct {
 
 // GitHubRepository represents data from GitHub API
 type GitHubRepository struct {
-	ID              int       `json:"id"`
-	Name            string    `json:"name"`
-	FullName        string    `json:"full_name"`
-	Description     string    `json:"description"`
-	HTMLURL         string    `json:"html_url"`
-	Language        string    `json:"language"`
 	StargazersCount int       `json:"stargazers_count"`
 	ForksCount      int       `json:"forks_count"`
 	UpdatedAt       time.Time `json:"updated_at"`
-	Topics          []string  `json:"topics"`
-	Private         bool      `json:"private"`
 }
 
 // ProjectDetailPageData represents all data needed for a project detail page

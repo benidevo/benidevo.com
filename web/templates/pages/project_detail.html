@@ -82,7 +82,7 @@
                 <div class="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
                     <h2 class="text-h2 text-primary mb-8">About This Project</h2>
                     <div class="prose prose-lg max-w-none">
-                        <div class="text-neutral leading-relaxed whitespace-pre-line">{{.Project.DetailedDescription}}</div>
+                        <div class="text-neutral leading-relaxed markdown-content">{{markdown .Project.DetailedDescription}}</div>
                     </div>
                 </div>
             </section>

@@ -48,8 +48,3 @@ func (r *InMemoryTechnologyRepository) GetAllTechnologies() (map[string]models.T
 	}
 	return result, nil
 }
-
-// AddTechnology adds a technology to the in-memory store (for testing)
-func (r *InMemoryTechnologyRepository) AddTechnology(name string, technology models.Technology) {
-	r.technologies[name] = technology
-}

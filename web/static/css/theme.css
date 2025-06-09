@@ -634,4 +634,162 @@
       transform: translateY(0);
     }
   }
+
+  /* Markdown Content Styling */
+  .markdown-content h1,
+  .markdown-content h2,
+  .markdown-content h3,
+  .markdown-content h4,
+  .markdown-content h5,
+  .markdown-content h6 {
+    color: var(--color-primary);
+    font-weight: 600;
+    line-height: 1.4;
+    margin-top: 3rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* First header should have less top margin */
+  .markdown-content h1:first-child,
+  .markdown-content h2:first-child,
+  .markdown-content h3:first-child,
+  .markdown-content h4:first-child,
+  .markdown-content h5:first-child,
+  .markdown-content h6:first-child {
+    margin-top: 0;
+  }
+
+
+  .markdown-content h1 {
+    font-size: 2.25rem;
+    border-bottom: 2px solid var(--color-secondary);
+    padding-bottom: 0.5rem;
+  }
+
+  .markdown-content h2 {
+    font-size: 1.875rem;
+    border-bottom: 1px solid var(--color-neutral);
+    padding-bottom: 0.25rem;
+  }
+
+  .markdown-content h3 {
+    font-size: 1.5rem;
+  }
+
+  .markdown-content h4 {
+    font-size: 1.25rem;
+  }
+
+  .markdown-content p {
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+    color: var(--color-neutral);
+  }
+
+  /* Better spacing for content after headers */
+  .markdown-content h1 + p,
+  .markdown-content h2 + p,
+  .markdown-content h3 + p,
+  .markdown-content h4 + p,
+  .markdown-content h5 + p,
+  .markdown-content h6 + p {
+    margin-top: 0.75rem;
+  }
+
+  .markdown-content ul,
+  .markdown-content ol {
+    margin-bottom: 1.5rem;
+    padding-left: 2rem;
+    list-style: initial !important;
+    list-style-position: outside !important;
+  }
+
+  .markdown-content ul {
+    list-style-type: disc !important;
+  }
+
+  .markdown-content ol {
+    list-style-type: decimal !important;
+  }
+
+  .markdown-content li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+    display: list-item !important;
+    list-style: inherit !important;
+  }
+
+  .markdown-content ul ul,
+  .markdown-content ol ol,
+  .markdown-content ul ol,
+  .markdown-content ol ul {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .markdown-content ul ul {
+    list-style-type: circle;
+  }
+
+  .markdown-content ul ul ul {
+    list-style-type: square;
+  }
+
+  .markdown-content blockquote {
+    border-left: 4px solid var(--color-secondary);
+    padding-left: 1.5rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: var(--color-neutral);
+  }
+
+  .markdown-content code {
+    background-color: var(--color-surface);
+    padding: 0.125rem 0.375rem;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-accent);
+  }
+
+  .markdown-content pre {
+    background-color: var(--color-surface);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(100, 116, 139, 0.1);
+  }
+
+  .markdown-content pre code {
+    background-color: transparent;
+    padding: 0;
+    color: var(--color-primary);
+  }
+
+  .markdown-content a {
+    color: var(--color-secondary);
+    text-decoration: underline;
+    transition: color var(--transition-fast);
+  }
+
+  .markdown-content a:hover {
+    color: var(--color-accent);
+  }
+
+  .markdown-content strong {
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
+  .markdown-content em {
+    font-style: italic;
+  }
+
+  .markdown-content hr {
+    border: none;
+    height: 1px;
+    background-color: var(--color-neutral);
+    margin: 2rem 0;
+  }
 }

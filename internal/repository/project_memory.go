@@ -36,11 +36,6 @@ func (r *InMemoryProjectRepository) GetProjectByID(id int) (*models.Project, err
 	return project, nil
 }
 
-// AddProject adds a project to the in-memory store (for testing)
-func (r *InMemoryProjectRepository) AddProject(project *models.Project) {
-	r.projects[project.ID] = project
-}
-
 // InMemorySkillRepository implements SkillRepository with in-memory data
 type InMemorySkillRepository struct {
 	skillCategories []models.SkillCategory
@@ -59,9 +54,4 @@ func (r *InMemorySkillRepository) GetSkillCategories() ([]models.SkillCategory, 
 	categories := make([]models.SkillCategory, len(r.skillCategories))
 	copy(categories, r.skillCategories)
 	return categories, nil
-}
-
-// AddSkillCategory adds a skill category to the in-memory store (for testing)
-func (r *InMemorySkillRepository) AddSkillCategory(category models.SkillCategory) {
-	r.skillCategories = append(r.skillCategories, category)
 }

@@ -34,11 +34,8 @@ func (c *GitHubClient) HTTPClient() *http.Client {
 
 // GitHubFile represents a file response from GitHub Contents API
 type GitHubFile struct {
-	Name        string `json:"name"`
-	Path        string `json:"path"`
-	Content     string `json:"content"`
-	Encoding    string `json:"encoding"`
-	DownloadURL string `json:"download_url"`
+	Content  string `json:"content"`
+	Encoding string `json:"encoding"`
 }
 
 // NewGitHubClient creates a new GitHub client

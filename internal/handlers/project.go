@@ -30,11 +30,7 @@ func (h *ProjectHandler) GetProjectDetail(c *gin.Context) {
 	projectID, err := strconv.Atoi(projectIDStr)
 	if err != nil {
 		log.Error().Err(err).Str("project_id", projectIDStr).Msg("Invalid project ID")
-		c.HTML(http.StatusNotFound, "404", gin.H{
-			"Title":       "Project Not Found",
-			"Description": "The project you're looking for doesn't exist.",
-			"CurrentYear": time.Now().Year(),
-		})
+		c.HTML(http.StatusNotFound, "404", nil)
 		return
 	}
 
@@ -43,11 +39,7 @@ func (h *ProjectHandler) GetProjectDetail(c *gin.Context) {
 	project := h.projectService.GetProjectByID(projectID)
 	if project == nil {
 		log.Warn().Int("project_id", projectID).Msg("Project not found")
-		c.HTML(http.StatusNotFound, "404", gin.H{
-			"Title":       "Project Not Found",
-			"Description": "The project you're looking for doesn't exist.",
-			"CurrentYear": time.Now().Year(),
-		})
+		c.HTML(http.StatusNotFound, "404", nil)
 		return
 	}
 
@@ -80,8 +72,10 @@ func (h *ProjectHandler) GetProjectDetailFragment(c *gin.Context) {
 		c.String(http.StatusNotFound, "Project not found")
 		return
 	}
+	c.Header("HX-Trigger", "project-loaded")
+	c.Header("HX-Push-Url", "/projects/"+projectIDStr)
 
-	c.HTML(http.StatusOK, "project_detail_fragment.html", gin.H{
+	c.HTML(http.StatusOK, "project_detail_fragment", gin.H{
 		"Project": project,
 	})
 }
