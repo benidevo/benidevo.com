@@ -6,14 +6,6 @@
 
 A modern, modular portfolio website built with Go.
 
-## 🎯 Overview
-
-A portfolio website designed to showcase:
-
-- **Projects**: Key engineering work and technical achievements
-- **Experience**: Professional background and skills
-- **Writing**: Technical articles and insights
-
 ## 🛠️ Technology Stack
 
 ### Backend
@@ -164,7 +156,6 @@ Run tests locally with:
 
 ```bash
 make test              # Run all tests
-make test-short        # Run short tests only
 ```
 
 ## 🚦 CI/CD
@@ -174,6 +165,7 @@ The project uses GitHub Actions for continuous integration:
 - **Build**: Verifies Docker image builds successfully
 - **Lint**: Checks code formatting and runs `go vet`
 - **Test**: Runs unit tests
+- **Deploy**: Deploys to production on successful builds
 
 ## 📄 License
 
