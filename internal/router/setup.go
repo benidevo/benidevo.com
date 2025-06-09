@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
 
+	"github.com/benidevo/website/internal/config"
 	"github.com/benidevo/website/internal/handlers"
 	"github.com/benidevo/website/internal/repository"
 	"github.com/benidevo/website/internal/services"
@@ -68,17 +69,29 @@ func createMultiTemplateRenderer() multitemplate.Renderer {
 	return r
 }
 
-func SetupRoutes() *gin.Engine {
+func SetupRoutes(cfg *config.Settings) *gin.Engine {
 	router := gin.Default()
 	router.Use(globalErrorHandler)
 
 	router.HTMLRender = createMultiTemplateRenderer()
 	router.Static("/static", "./web/static")
 
-	// Initialize repositories
-	techRepo := repository.NewInMemoryTechnologyRepository()
-	projectRepo := repository.NewInMemoryProjectRepository(techRepo)
-	skillRepo := repository.NewInMemorySkillRepository(techRepo)
+	// Initialize repositories - use GitHub repositories if configured, otherwise fall back to in-memory
+	var techRepo repository.TechnologyRepository
+	var projectRepo repository.ProjectRepository
+	var skillRepo repository.SkillRepository
+
+	if cfg.GitHub.Owner != "" && cfg.GitHub.Repository != "" {
+		log.Info().Msg("Using GitHub repositories for data")
+		techRepo = repository.NewGitHubTechnologyRepository(&cfg.GitHub)
+		projectRepo = repository.NewGitHubProjectRepository(&cfg.GitHub, techRepo)
+		skillRepo = repository.NewGitHubSkillRepository(&cfg.GitHub)
+	} else {
+		log.Info().Msg("Using in-memory repositories for data")
+		techRepo = repository.NewInMemoryTechnologyRepository()
+		projectRepo = repository.NewInMemoryProjectRepository(techRepo)
+		skillRepo = repository.NewInMemorySkillRepository(techRepo)
+	}
 
 	// Initialize services
 	projectService := services.NewProjectService(projectRepo, skillRepo)

@@ -37,7 +37,7 @@ func (a *App) Setup() error {
 	config.InitializeLogger(a.cfg.IsDevelopment, a.cfg.LogLevel)
 
 	log.Info().Msgf("Starting server on port %s", a.cfg.Port)
-	a.router = router.SetupRoutes()
+	a.router = router.SetupRoutes(a.cfg)
 
 	log.Info().Msg("Routes have been set up successfully")
 
