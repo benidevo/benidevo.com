@@ -38,19 +38,20 @@ website/
 │   └── website/          # Application entry point
 ├── internal/             # Private application code
 │   ├── app/             # Application lifecycle management
-│   ├── config/          # Configuration and logging
-│   ├── router/          # HTTP routing setup
-│   ├── handlers/        # Request handlers
+│   ├── config/          # Configuration, logging, and dependency setup
+│   ├── client/          # External API clients (GitHub)
+│   ├── handlers/        # HTTP request handlers
 │   ├── middleware/      # HTTP middleware
-│   ├── services/        # Business logic
-│   └── models/          # Data structures
+│   ├── models/          # Data structures and domain models
+│   ├── repository/      # Data access layer (GitHub API + in-memory)
+│   ├── router/          # HTTP routing and template setup
+│   └── services/        # Business logic and service orchestration
 ├── web/                 # Frontend assets
-│   ├── templates/       # HTML templates
+│   ├── templates/       # HTML templates (layouts, pages, partials)
 │   ├── static/          # CSS, JS, images
 │   └── assets/          # Source assets
 ├── docker/              # Docker configurations
-├── docs/                # Project documentation
-└── scripts/             # Build and deployment scripts
+└── data/                # Static data files
 ```
 
 ## 🚀 Getting Started
@@ -113,16 +114,31 @@ The application uses environment variables for configuration:
 | `PORT` | Server port | `8080` |
 | `IS_DEVELOPMENT` | Development mode | `true` |
 | `LOG_LEVEL` | Logging level | `info` |
+| `GITHUB_OWNER` | GitHub repository owner | |
+| `GITHUB_REPOSITORY` | GitHub repository name | |
+| `GITHUB_TOKEN` | GitHub API token (optional) | |
+| `GITHUB_BASE_URL` | GitHub API base URL | `https://api.github.com` |
+
+### Data Sources
+
+The application supports two data source modes:
+
+- **GitHub Mode**: Fetches project and skill data from GitHub repository files (when `GITHUB_TOKEN` is configured)
+- **In-Memory Mode**: Uses hardcoded mock data for local development (fallback when GitHub is not configured)
 
 ## 🏗️ Architecture
 
-The application follows a clean architecture pattern with:
+The application follows a clean architecture pattern with dependency injection
 
-- **Separation of Concerns**: Clear boundaries between HTTP handling, business logic, and data
-- **Dependency Injection**: Services are injected where needed
+### Key Architectural Principles
+
+- **Dependency Injection**: Clear dependency contracts with setup functions
+- **Repository Pattern**: Abstracted data access with GitHub API and in-memory implementations
+- **Service Layer**: Business logic separated from HTTP concerns
+- **Error Handling**: Global panic recovery with proper HTTP status codes (404, 500)
+- **Template Rendering**: Multi-template system with shared layouts and partials
 - **Graceful Shutdown**: Proper signal handling for zero-downtime deployments
 - **Structured Logging**: Consistent, queryable logs with Zerolog
-- **Error Handling**: Global error recovery and user-friendly error pages
 
 ## 🚦 CI/CD
 
