@@ -1,0 +1,79 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: portfolio-website
+  annotations:
+    run.googleapis.com/ingress: all
+    run.googleapis.com/execution-environment: gen2
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "0"
+        autoscaling.knative.dev/maxScale: "10"
+        run.googleapis.com/memory: "512Mi"
+        run.googleapis.com/cpu: "1000m"
+        run.googleapis.com/startup-cpu-boost: "true"
+        run.googleapis.com/execution-environment: gen2
+    spec:
+      containerConcurrency: 100
+      timeoutSeconds: 300
+      serviceAccountName: cloud-run-sa@PROJECT_ID.iam.gserviceaccount.com
+      containers:
+      - image: REGION-docker.pkg.dev/PROJECT_ID/portfolio-website:latest
+        ports:
+        - name: http1
+          containerPort: 8080
+        env:
+        - name: PORT
+          value: "8080"
+        - name: IS_DEVELOPMENT
+          value: "false"
+        - name: LOG_LEVEL
+          value: "info"
+        - name: GITHUB_OWNER
+          valueFrom:
+            secretKeyRef:
+              name: github-config
+              key: owner
+        - name: GITHUB_REPOSITORY
+          valueFrom:
+            secretKeyRef:
+              name: github-config
+              key: repository
+        - name: GITHUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: github-config
+              key: token
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+  traffic:
+  - percent: 100
+    latestRevision: true

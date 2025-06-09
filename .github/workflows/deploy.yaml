@@ -1,0 +1,170 @@
+name: Deploy to Cloud Run
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+        - production
+        - staging
+      version:
+        description: 'Version/tag to deploy (leave empty for latest commit)'
+        required: false
+        default: ''
+      force_deploy:
+        description: 'Force deployment even if no changes detected'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  SERVICE_NAME: portfolio-website
+  REGION: us-central1
+  REGISTRY: us-central1-docker.pkg.dev
+
+jobs:
+  deploy:
+    name: Deploy to Cloud Run
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.version || github.ref }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.REGISTRY }}
+
+      - name: Generate deployment metadata
+        id: meta
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          if [[ -z "$VERSION" ]]; then
+            VERSION="${{ github.sha }}"
+          fi
+
+          ENVIRONMENT="${{ github.event.inputs.environment }}"
+          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+
+          # Create unique image tag
+          IMAGE_TAG="${ENVIRONMENT}-${TIMESTAMP}-${VERSION:0:8}"
+          FULL_IMAGE="${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}:${IMAGE_TAG}"
+
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "environment=${ENVIRONMENT}" >> $GITHUB_OUTPUT
+          echo "image_tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
+          echo "full_image=${FULL_IMAGE}" >> $GITHUB_OUTPUT
+          echo "timestamp=${TIMESTAMP}" >> $GITHUB_OUTPUT
+
+      - name: Build production image
+        run: |
+          docker build \
+            -f docker/prod/Dockerfile \
+            -t ${{ steps.meta.outputs.full_image }} \
+            --label "git-commit=${{ steps.meta.outputs.version }}" \
+            --label "build-timestamp=${{ steps.meta.outputs.timestamp }}" \
+            --label "environment=${{ steps.meta.outputs.environment }}" \
+            .
+
+      - name: Push image to Artifact Registry
+        run: docker push ${{ steps.meta.outputs.full_image }}
+
+      - name: Deploy to Cloud Run
+        id: deploy
+        run: |
+          # Determine service name based on environment
+          if [[ "${{ steps.meta.outputs.environment }}" == "staging" ]]; then
+            SERVICE_NAME="${{ env.SERVICE_NAME }}-staging"
+          else
+            SERVICE_NAME="${{ env.SERVICE_NAME }}"
+          fi
+
+          # Deploy to Cloud Run
+          gcloud run deploy $SERVICE_NAME \
+            --image ${{ steps.meta.outputs.full_image }} \
+            --region ${{ env.REGION }} \
+            --platform managed \
+            --allow-unauthenticated \
+            --port 8080 \
+            --memory 512Mi \
+            --cpu 1000m \
+            --min-instances 0 \
+            --max-instances 10 \
+            --concurrency 100 \
+            --timeout 300 \
+            --set-env-vars "IS_DEVELOPMENT=false" \
+            --set-env-vars "LOG_LEVEL=info" \
+            --set-env-vars "GITHUB_OWNER=${{ secrets.G_OWNER }}" \
+            --set-env-vars "GITHUB_REPOSITORY=${{ secrets.G_REPOSITORY }}" \
+            --set-env-vars "GITHUB_TOKEN=${{ secrets.G_TOKEN }}" \
+            --tag "deploy-${{ steps.meta.outputs.timestamp }}" \
+            --revision-suffix "${{ steps.meta.outputs.image_tag }}"
+
+          # Get service URL
+          SERVICE_URL=$(gcloud run services describe $SERVICE_NAME --region ${{ env.REGION }} --format 'value(status.url)')
+          echo "service_url=${SERVICE_URL}" >> $GITHUB_OUTPUT
+          echo "service_name=${SERVICE_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Verify deployment
+        run: |
+          echo "Waiting for service to be ready..."
+          sleep 30
+
+          # Test health endpoint
+          response=$(curl -s -o /dev/null -w "%{http_code}" "${{ steps.deploy.outputs.service_url }}/health" || echo "000")
+
+          if [[ "$response" -eq 200 ]]; then
+            echo "✅ Health check passed (HTTP $response)"
+          else
+            echo "❌ Health check failed (HTTP $response)"
+            exit 1
+          fi
+
+      - name: Create deployment summary
+        run: |
+          cat >> $GITHUB_STEP_SUMMARY << EOF
+          ## 🚀 Deployment Summary
+
+          **Environment:** ${{ steps.meta.outputs.environment }}
+          **Service:** ${{ steps.deploy.outputs.service_name }}
+          **Version:** ${{ steps.meta.outputs.version }}
+          **Image:** \`${{ steps.meta.outputs.full_image }}\`
+          **URL:** ${{ steps.deploy.outputs.service_url }}
+          **Deployed at:** ${{ steps.meta.outputs.timestamp }}
+
+          ### Verification
+          - ✅ Image built and pushed
+          - ✅ Service deployed
+          - ✅ Health check passed
+
+          ### Next Steps
+          - Test the deployment: [${{ steps.deploy.outputs.service_url }}](${{ steps.deploy.outputs.service_url }})
+          - Monitor logs in [Google Cloud Console](https://console.cloud.google.com/run/detail/${{ env.REGION }}/${{ steps.deploy.outputs.service_name }}/logs?project=${{ env.PROJECT_ID }})
+          EOF
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          cat >> $GITHUB_STEP_SUMMARY << EOF
+          ## ❌ Deployment Failed
+
+          **Environment:** ${{ steps.meta.outputs.environment }}
+          **Version:** ${{ steps.meta.outputs.version }}
+          **Timestamp:** ${{ steps.meta.outputs.timestamp }}
+
+          Please check the logs above for details.
+          EOF
