@@ -24,19 +24,11 @@ func getTechnologyData() map[string]models.Technology {
 			Name: "JavaScript",
 			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg",
 		},
-		"TypeScript": {
-			Name: "TypeScript",
-			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg",
-		},
 
 		// Web Frameworks
 		"Spring Boot": {
 			Name: "Spring Boot",
 			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/spring/spring-original.svg",
-		},
-		"Gin": {
-			Name: "Gin",
-			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/go/go-original.svg",
 		},
 		"FastAPI": {
 			Name: "FastAPI",
@@ -78,12 +70,8 @@ func getTechnologyData() map[string]models.Technology {
 			Name: "Kubernetes",
 			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kubernetes/kubernetes-plain.svg",
 		},
-		"AWS": {
-			Name: "AWS",
-			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg",
-		},
-		"Google Cloud": {
-			Name: "Google Cloud",
+		"Google Cloud Platform": {
+			Name: "Google Cloud Platform",
 			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/googlecloud/googlecloud-original.svg",
 		},
 		"Nginx": {
@@ -102,15 +90,15 @@ func getTechnologyData() map[string]models.Technology {
 			Name: "Virtualization",
 			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vagrant/vagrant-original.svg",
 		},
+		"Helm": {
+			Name: "Helm",
+			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/helm/helm-original.svg",
+		},
 
 		// Message Queues & Streaming
 		"Apache Kafka": {
 			Name: "Apache Kafka",
 			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/apachekafka/apachekafka-original.svg",
-		},
-		"RabbitMQ": {
-			Name: "RabbitMQ",
-			Icon: "https://www.svgrepo.com/show/303576/rabbitmq-logo.svg",
 		},
 
 		// Monitoring & Observability
@@ -122,9 +110,14 @@ func getTechnologyData() map[string]models.Technology {
 			Name: "Grafana",
 			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/grafana/grafana-original.svg",
 		},
-		"Jaeger": {
-			Name: "Jaeger",
-			Icon: "https://www.jaegertracing.io/img/jaeger-icon-color.svg",
+		"OpenTelemetry": {
+			Name: "OpenTelemetry",
+			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/opentelemetry/opentelemetry-original.svg",
+		},
+
+		"GitHub Actions": {
+			Name: "GitHub Actions",
+			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg",
 		},
 
 		// Communication Protocols
@@ -132,64 +125,11 @@ func getTechnologyData() map[string]models.Technology {
 			Name: "gRPC",
 			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/grpc/grpc-original.svg",
 		},
-		"REST": {
-			Name: "REST",
-			Icon: "https://www.svgrepo.com/show/373903/postman.svg",
-		},
-		"GraphQL": {
-			Name: "GraphQL",
-			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/graphql/graphql-plain.svg",
-		},
 
-		"Spring Cloud": {
-			Name: "Spring Cloud",
-			Icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/spring.svg",
-		},
-		"Eureka": {
-			Name: "Eureka",
-			Icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/spring.svg",
-		},
-		"Hystrix": {
-			Name: "Hystrix",
-			Icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/netflix.svg",
-		},
-		"Zuul": {
-			Name: "Zuul",
-			Icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/netflix.svg",
-		},
-		"Zipkin": {
-			Name: "Zipkin",
-			Icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/zipkin.svg",
-		},
-
-		// Testing
-		"JUnit": {
-			Name: "JUnit",
-			Icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/java.svg",
-		},
-		"Mockito": {
-			Name: "Mockito",
-			Icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/oracle.svg",
-		},
-		"Testify": {
-			Name: "Testify",
-			Icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/go.svg",
-		},
-
-		// Build Tools & CI/CD
-		"GitHub Actions": {
-			Name: "GitHub Actions",
-			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg",
-		},
-		"Jenkins": {
-			Name: "Jenkins",
-			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jenkins/jenkins-original.svg",
-		},
-
-		// Architecture Patterns (using generic icons)
+		// Architecture Patterns
 		"Microservices": {
 			Name: "Microservices",
-			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kubernetes/kubernetes-plain.svg",
+			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg",
 		},
 		"Event Sourcing": {
 			Name: "Event Sourcing",
@@ -199,9 +139,17 @@ func getTechnologyData() map[string]models.Technology {
 			Name: "CQRS",
 			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/graphql/graphql-plain.svg",
 		},
-		"DDD": {
-			Name: "DDD",
-			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/databricks/databricks-original.svg",
+		"Domain-Driven Design": {
+			Name: "Domain-Driven Design",
+			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/unifiedmodelinglanguage/unifiedmodelinglanguage-original.svg",
+		},
+		"Distributed Systems": {
+			Name: "Distributed Systems",
+			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/networkx/networkx-original.svg",
+		},
+		"System Integration": {
+			Name: "System Integration",
+			Icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/azuredevops/azuredevops-original.svg",
 		},
 	}
 }
