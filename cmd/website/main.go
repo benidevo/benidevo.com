@@ -8,7 +8,11 @@ import (
 )
 
 func main() {
-	cfg := config.NewSettings()
+	cfg, err := config.SetupConfig()
+	if err != nil {
+		log.Fatalf("Failed to setup configuration: %v", err)
+	}
+
 	appInstance := app.New(cfg)
 
 	if err := appInstance.Run(); err != nil {

@@ -11,12 +11,11 @@ import (
 
 	"github.com/benidevo/website/internal/config"
 	"github.com/benidevo/website/internal/handlers"
-	"github.com/benidevo/website/internal/repository"
 	"github.com/benidevo/website/internal/services"
 )
 
 func createMultiTemplateRenderer() multitemplate.Renderer {
-	r := multitemplate.NewRenderer()
+	renderer := multitemplate.NewRenderer()
 
 	// Set up template functions
 	funcMap := template.FuncMap{
@@ -45,70 +44,58 @@ func createMultiTemplateRenderer() multitemplate.Renderer {
 	}
 
 	// Create templates with base layout, partials, and page content
-	r.AddFromFilesFuncs("home", funcMap,
+	renderer.AddFromFilesFuncs("home", funcMap,
 		"web/templates/home.html",
 		"web/templates/layouts/base.html",
 		"web/templates/partials/header.html",
 		"web/templates/partials/footer.html",
 		"web/templates/pages/home.html")
 
-	r.AddFromFilesFuncs("project_detail", funcMap,
+	renderer.AddFromFilesFuncs("project_detail", funcMap,
 		"web/templates/project_detail.html",
 		"web/templates/layouts/base.html",
 		"web/templates/partials/header.html",
 		"web/templates/partials/footer.html",
 		"web/templates/pages/project_detail.html")
 
-	r.AddFromFilesFuncs("404", funcMap,
+	renderer.AddFromFilesFuncs("404", funcMap,
 		"web/templates/404.html",
 		"web/templates/layouts/base.html",
 		"web/templates/partials/header.html",
 		"web/templates/partials/footer.html",
 		"web/templates/pages/404.html")
 
-	return r
+	renderer.AddFromFilesFuncs("500", funcMap,
+		"web/templates/500.html",
+		"web/templates/layouts/base.html",
+		"web/templates/partials/header.html",
+		"web/templates/partials/footer.html",
+		"web/templates/pages/500.html")
+
+	return renderer
 }
 
-func SetupRoutes(cfg *config.Settings) *gin.Engine {
+// SetupRouter initializes and configures the Gin router with all dependencies
+func SetupRouter(cfg *config.Config) (*gin.Engine, error) {
+	services, err := services.SetupServices(cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	handlers := handlers.SetupHandlers(services)
+
 	router := gin.Default()
 	router.Use(globalErrorHandler)
 
 	router.HTMLRender = createMultiTemplateRenderer()
 	router.Static("/static", "./web/static")
 
-	// Initialize repositories - use GitHub repositories if configured, otherwise fall back to in-memory
-	var techRepo repository.TechnologyRepository
-	var projectRepo repository.ProjectRepository
-	var skillRepo repository.SkillRepository
-
-	if cfg.GitHub.Owner != "" && cfg.GitHub.Repository != "" {
-		log.Info().
-			Str("owner", cfg.GitHub.Owner).
-			Str("repository", cfg.GitHub.Repository).
-			Str("baseURL", cfg.GitHub.BaseURL).
-			Bool("hasToken", cfg.GitHub.Token != "").
-			Msg("Using GitHub repositories for data")
-		techRepo = repository.NewGitHubTechnologyRepository(&cfg.GitHub)
-		projectRepo = repository.NewGitHubProjectRepository(&cfg.GitHub, techRepo)
-		skillRepo = repository.NewGitHubSkillRepository(&cfg.GitHub)
-	} else {
-		log.Info().Msg("Using in-memory repositories for data - GitHub owner/repository not configured")
-		techRepo = repository.NewInMemoryTechnologyRepository()
-		projectRepo = repository.NewInMemoryProjectRepository(techRepo)
-		skillRepo = repository.NewInMemorySkillRepository(techRepo)
-	}
-
-	// Initialize services
-	projectService := services.NewProjectService(projectRepo, skillRepo)
-
-	homeHandler := handlers.NewHomeHandler(projectService)
-	projectHandler := handlers.NewProjectHandler(projectService)
-
-	router.GET("/", homeHandler.HomePage)
+	// Setup routes with handlers
+	router.GET("/", handlers.HomeHandler.HomePage)
 
 	// Project routes
-	router.GET("/projects/:id", projectHandler.GetProjectDetail)
-	router.GET("/projects/:id/details", projectHandler.GetProjectDetailFragment)
+	router.GET("/projects/:id", handlers.ProjectHandler.GetProjectDetail)
+	router.GET("/projects/:id/details", handlers.ProjectHandler.GetProjectDetailFragment)
 
 	// Health check
 	router.GET("/health", func(c *gin.Context) {
@@ -119,18 +106,14 @@ func SetupRoutes(cfg *config.Settings) *gin.Engine {
 	})
 
 	router.NoRoute(func(c *gin.Context) {
-		c.HTML(http.StatusNotFound, "404", gin.H{
-			"Title":       "Page Not Found",
-			"Description": "The page you're looking for doesn't exist.",
-			"CurrentYear": time.Now().Year(),
-		})
+		c.HTML(http.StatusNotFound, "404", nil)
 	})
 
-	return router
+	return router, nil
 }
 
 // globalErrorHandler is a Gin middleware that recovers from panics and handles internal server errors
-// by rendering a generic 500 error page.
+// by rendering a 500 error page.
 //
 // It ensures that any unhandled errors or panics result in a
 // consistent error response to the client.
@@ -139,11 +122,7 @@ func globalErrorHandler(c *gin.Context) {
 		if err := recover(); err != nil {
 			log.Error().Err(err.(error)).Msg("Recovered from panic")
 
-			c.HTML(http.StatusInternalServerError, "404", gin.H{
-				"Title":       "Something Went Wrong",
-				"Description": "An internal server error occurred.",
-				"CurrentYear": time.Now().Year(),
-			})
+			c.HTML(http.StatusInternalServerError, "500", nil)
 			c.Abort()
 		}
 	}()
@@ -151,12 +130,7 @@ func globalErrorHandler(c *gin.Context) {
 	c.Next()
 
 	if len(c.Errors) > 0 || c.Writer.Status() == http.StatusInternalServerError {
-		c.HTML(http.StatusInternalServerError, "404", gin.H{
-			"Title":       "Something Went Wrong",
-			"Description": "An internal server error occurred.",
-			"CurrentYear": time.Now().Year(),
-			"CurrentPage": "500",
-		})
+		c.HTML(http.StatusInternalServerError, "500", nil)
 		c.Abort()
 	}
 }

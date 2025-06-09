@@ -87,7 +87,7 @@ func (r *GitHubTechnologyRepository) InitializeAsync() {
 // ensureTechnologiesLoaded loads technologies from GitHub if not already loaded
 func (r *GitHubTechnologyRepository) ensureTechnologiesLoaded() error {
 	if len(r.technologies) > 0 {
-		return nil // Already loaded
+		return nil
 	}
 
 	if !r.initialized {
@@ -100,7 +100,7 @@ func (r *GitHubTechnologyRepository) ensureTechnologiesLoaded() error {
 
 // loadTechnologies fetches and loads technologies from GitHub
 func (r *GitHubTechnologyRepository) loadTechnologies() error {
-	url := fmt.Sprintf("technologies/technologies.json")
+	url := "technologies/technologies.json"
 
 	content, err := r.githubClient.FetchFileContent(url)
 	if err != nil {

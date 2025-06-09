@@ -18,13 +18,13 @@ import (
 // App represents the main application structure, holding configuration settings,
 // the Gin router, HTTP server, and a channel for OS signals to manage graceful shutdown.
 type App struct {
-	cfg    *config.Settings
+	cfg    *config.Config
 	router *gin.Engine
 	server *http.Server
 	done   chan os.Signal
 }
 
-func New(cfg *config.Settings) *App {
+func New(cfg *config.Config) *App {
 	app := &App{
 		cfg:  cfg,
 		done: make(chan os.Signal, 1),
@@ -34,10 +34,13 @@ func New(cfg *config.Settings) *App {
 }
 
 func (a *App) Setup() error {
-	config.InitializeLogger(a.cfg.IsDevelopment, a.cfg.LogLevel)
+	log.Info().Msgf("Starting server on port %s", a.cfg.Settings.Port)
 
-	log.Info().Msgf("Starting server on port %s", a.cfg.Port)
-	a.router = router.SetupRoutes(a.cfg)
+	router, err := router.SetupRouter(a.cfg)
+	if err != nil {
+		return err
+	}
+	a.router = router
 
 	log.Info().Msg("Routes have been set up successfully")
 
@@ -51,7 +54,7 @@ func (a *App) Run() error {
 	}
 
 	a.server = &http.Server{
-		Addr:    ":" + a.cfg.Port,
+		Addr:    ":" + a.cfg.Settings.Port,
 		Handler: a.router,
 	}
 
