@@ -208,7 +208,7 @@ function updateParticlesTheme(theme) {
 function initializeTheme() {
   const savedTheme = localStorage.getItem('theme');
 
-  const themeToApply = savedTheme || 'dark';
+  const themeToApply = savedTheme || 'light';
 
   if (themeToApply === 'light') {
     document.documentElement.setAttribute('data-theme', 'light');
