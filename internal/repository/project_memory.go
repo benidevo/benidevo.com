@@ -1,8 +1,6 @@
 package repository
 
 import (
-	"fmt"
-
 	"github.com/benidevo/website/internal/models"
 )
 
@@ -25,15 +23,6 @@ func (r *InMemoryProjectRepository) GetAllProjects() ([]*models.Project, error) 
 		projects = append(projects, project)
 	}
 	return projects, nil
-}
-
-// GetProjectByID returns a project by its ID
-func (r *InMemoryProjectRepository) GetProjectByID(id int) (*models.Project, error) {
-	project, exists := r.projects[id]
-	if !exists {
-		return nil, fmt.Errorf("project with ID %d not found", id)
-	}
-	return project, nil
 }
 
 // InMemorySkillRepository implements SkillRepository with in-memory data

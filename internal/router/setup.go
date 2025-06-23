@@ -60,13 +60,6 @@ func createMultiTemplateRenderer() multitemplate.Renderer {
 		"web/templates/partials/footer.html",
 		"web/templates/pages/home.html")
 
-	renderer.AddFromFilesFuncs("project_detail", funcMap,
-		"web/templates/project_detail.html",
-		"web/templates/layouts/base.html",
-		"web/templates/partials/header.html",
-		"web/templates/partials/footer.html",
-		"web/templates/pages/project_detail.html")
-
 	renderer.AddFromFilesFuncs("404", funcMap,
 		"web/templates/404.html",
 		"web/templates/layouts/base.html",
@@ -80,9 +73,6 @@ func createMultiTemplateRenderer() multitemplate.Renderer {
 		"web/templates/partials/header.html",
 		"web/templates/partials/footer.html",
 		"web/templates/pages/500.html")
-
-	renderer.AddFromFilesFuncs("project_detail_fragment", funcMap,
-		"web/templates/partials/project_detail_fragment.html")
 
 	return renderer
 }
@@ -105,8 +95,6 @@ func SetupRouter(cfg *config.Config) (*gin.Engine, error) {
 	router.Static("/static", "./web/static")
 
 	router.GET("/", handlers.HomeHandler.HomePage)
-	router.GET("/projects/:id", handlers.ProjectHandler.GetProjectDetail)
-	router.GET("/projects/:id/details", handlers.ProjectHandler.GetProjectDetailFragment)
 
 	router.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{

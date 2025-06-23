@@ -8,17 +8,14 @@ type Technology struct {
 
 // Project represents a software project
 type Project struct {
-	ID                         int          `json:"id"`
-	Title                      string       `json:"title"`
-	Description                string       `json:"description"`
-	DetailedDescription        string       `json:"detailed_description"`
-	ArchitectureDiagramURL     string       `json:"architecture_diagram_url,omitempty"`
-	ArchitectureDiagramContent string       `json:"architecture_diagram_content,omitempty"`
-	GitHubURL                  string       `json:"github_url"`
-	LiveURL                    string       `json:"live_url,omitempty"`
-	Language                   string       `json:"language"`
-	Technologies               []Technology `json:"technologies"`
-	Featured                   bool         `json:"featured"`
+	ID           int          `json:"id"`
+	Title        string       `json:"title"`
+	Description  string       `json:"description"`
+	GitHubURL    string       `json:"github_url"`
+	LiveURL      string       `json:"live_url,omitempty"`
+	Language     string       `json:"language"`
+	Technologies []Technology `json:"technologies"`
+	Featured     bool         `json:"featured"`
 }
 
 // Skill represents a technical skill
@@ -34,15 +31,6 @@ type SkillCategory struct {
 	Skills   []Skill `json:"skills"`
 }
 
-// ProjectDetailPageData represents all data needed for a project detail page
-type ProjectDetailPageData struct {
-	Title        string   `json:"title"`
-	Description  string   `json:"description"`
-	CanonicalURL string   `json:"canonical_url"`
-	CurrentYear  int      `json:"current_year"`
-	Project      *Project `json:"project"`
-}
-
 // HomePageData represents all data needed for the home page
 type HomePageData struct {
 	Title            string          `json:"title"`
@@ -55,16 +43,14 @@ type HomePageData struct {
 
 // ProjectData represents the JSON structure for a project in GitHub data files
 type ProjectData struct {
-	ID                      int      `json:"id"`
-	Title                   string   `json:"title"`
-	Description             string   `json:"description"`
-	GitHubURL               string   `json:"github_url"`
-	LiveURL                 string   `json:"live_url"`
-	Language                string   `json:"language"`
-	Technologies            []string `json:"technologies"`
-	Featured                bool     `json:"featured"`
-	ArchitectureDiagramURL  string   `json:"architecture_diagram_url"`
-	DetailedDescriptionFile string   `json:"detailed_description_file"`
+	ID           int      `json:"id"`
+	Title        string   `json:"title"`
+	Description  string   `json:"description"`
+	GitHubURL    string   `json:"github_url"`
+	LiveURL      string   `json:"live_url"`
+	Language     string   `json:"language"`
+	Technologies []string `json:"technologies"`
+	Featured     bool     `json:"featured"`
 }
 
 // ProjectsResponse represents the structure of projects.json from GitHub

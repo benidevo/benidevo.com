@@ -3,7 +3,6 @@ package repository
 import (
 	"encoding/json"
 	"fmt"
-	"strings"
 
 	"github.com/benidevo/website/internal/client"
 	"github.com/benidevo/website/internal/config"
@@ -51,22 +50,6 @@ func (r *GitHubProjectRepository) GetAllProjects() ([]*models.Project, error) {
 	return projects, nil
 }
 
-// GetProjectByID fetches a specific project by ID from GitHub repository
-func (r *GitHubProjectRepository) GetProjectByID(id int) (*models.Project, error) {
-	projects, err := r.GetAllProjects()
-	if err != nil {
-		return nil, err
-	}
-
-	for _, project := range projects {
-		if project.ID == id {
-			return project, nil
-		}
-	}
-
-	return nil, fmt.Errorf("project with ID %d not found", id)
-}
-
 // fetchProjectsData fetches and parses projects.json from GitHub
 func (r *GitHubProjectRepository) fetchProjectsData() (*models.ProjectsResponse, error) {
 	content, err := r.githubClient.FetchFileContent("projects/projects.json")
@@ -92,46 +75,19 @@ func (r *GitHubProjectRepository) PrewarmCache() {
 	}
 }
 
-// fetchDetailedDescription fetches the detailed description markdown file
-func (r *GitHubProjectRepository) fetchDetailedDescription(filename string) (string, error) {
-	return r.githubClient.FetchFileContent(fmt.Sprintf("projects/details/%s", filename))
-}
-
 // convertToProject converts ProjectData to models.Project
 func (r *GitHubProjectRepository) convertToProject(data models.ProjectData) (*models.Project, error) {
-	detailedDescription, err := r.fetchDetailedDescription(data.DetailedDescriptionFile)
-	if err != nil {
-		log.Warn().Err(err).Str("file", data.DetailedDescriptionFile).Msg("Failed to fetch detailed description")
-		detailedDescription = data.Description
-	}
-
 	technologies := r.techRepo.GetTechnologies(data.Technologies)
 
 	project := &models.Project{
-		ID:                     data.ID,
-		Title:                  data.Title,
-		Description:            data.Description,
-		DetailedDescription:    detailedDescription,
-		ArchitectureDiagramURL: data.ArchitectureDiagramURL,
-		GitHubURL:              data.GitHubURL,
-		LiveURL:                data.LiveURL,
-		Language:               data.Language,
-		Technologies:           technologies,
-		Featured:               data.Featured,
-	}
-
-	if data.ArchitectureDiagramURL != "" {
-		// Extract filename from URL (e.g., "project-architecture.jpg" from the URL)
-		parts := strings.Split(data.ArchitectureDiagramURL, "/")
-		if len(parts) > 0 {
-			filename := parts[len(parts)-1]
-			content, err := r.githubClient.FetchBinaryFileContent(fmt.Sprintf("assets/diagrams/%s", filename))
-			if err != nil {
-				log.Warn().Err(err).Str("diagram", filename).Msg("Failed to fetch architecture diagram")
-			} else {
-				project.ArchitectureDiagramContent = content
-			}
-		}
+		ID:           data.ID,
+		Title:        data.Title,
+		Description:  data.Description,
+		GitHubURL:    data.GitHubURL,
+		LiveURL:      data.LiveURL,
+		Language:     data.Language,
+		Technologies: technologies,
+		Featured:     data.Featured,
 	}
 
 	return project, nil

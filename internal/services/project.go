@@ -30,16 +30,6 @@ func (p *ProjectService) GetFeaturedProjects() []*models.Project {
 	return projects
 }
 
-// GetProjectByID returns a project by its ID
-func (p *ProjectService) GetProjectByID(projectID int) *models.Project {
-	project, err := p.projectRepo.GetProjectByID(projectID)
-	if err != nil {
-		log.Error().Err(err).Int("projectID", projectID).Msg("Failed to get project")
-		return nil
-	}
-	return project
-}
-
 // GetSkillCategories returns skill categories for the home page
 func (p *ProjectService) GetSkillCategories() []models.SkillCategory {
 	categories, err := p.skillRepo.GetSkillCategories()

@@ -8,9 +8,6 @@ import (
 type ProjectRepository interface {
 	// GetAllProjects returns all projects
 	GetAllProjects() ([]*models.Project, error)
-
-	// GetProjectByID returns a project by its ID (includes all details)
-	GetProjectByID(id int) (*models.Project, error)
 }
 
 // TechnologyRepository defines the interface for technology data access

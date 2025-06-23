@@ -42,53 +42,6 @@ func TestInMemoryProjectRepository_GetAllProjects(t *testing.T) {
 	}
 }
 
-func TestInMemoryProjectRepository_GetProjectByID(t *testing.T) {
-	tests := []struct {
-		name      string
-		projects  map[int]*models.Project
-		projectID int
-		want      *models.Project
-		wantErr   bool
-	}{
-		{
-			name: "returns project when found",
-			projects: map[int]*models.Project{
-				1: {ID: 1, Title: "Project 1"},
-			},
-			projectID: 1,
-			want:      &models.Project{ID: 1, Title: "Project 1"},
-			wantErr:   false,
-		},
-		{
-			name: "returns error when not found",
-			projects: map[int]*models.Project{
-				1: {ID: 1, Title: "Project 1"},
-			},
-			projectID: 99,
-			want:      nil,
-			wantErr:   true,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			repo := &InMemoryProjectRepository{
-				projects: tt.projects,
-			}
-
-			result, err := repo.GetProjectByID(tt.projectID)
-
-			if tt.wantErr {
-				assert.Error(t, err)
-				assert.Nil(t, result)
-			} else {
-				assert.NoError(t, err)
-				assert.Equal(t, tt.want, result)
-			}
-		})
-	}
-}
-
 func TestInMemorySkillRepository_GetSkillCategories(t *testing.T) {
 	tests := []struct {
 		name       string
