@@ -18,14 +18,14 @@
                     <a href="/" onclick="event.preventDefault(); navigateToSection('hero');" class="text-neutral hover:text-secondary px-3 py-2 text-sm font-medium transition-colors">
                         Home
                     </a>
-                    <a href="/" onclick="event.preventDefault(); navigateToSection('projects');" class="text-neutral hover:text-secondary px-3 py-2 text-sm font-medium transition-colors">
-                        Projects
+                    <a href="/" onclick="event.preventDefault(); navigateToSection('about');" class="text-neutral hover:text-secondary px-3 py-2 text-sm font-medium transition-colors">
+                        About
                     </a>
                     <a href="/" onclick="event.preventDefault(); navigateToSection('skills');" class="text-neutral hover:text-secondary px-3 py-2 text-sm font-medium transition-colors">
                         Skills
                     </a>
-                    <a href="/" onclick="event.preventDefault(); navigateToSection('about');" class="text-neutral hover:text-secondary px-3 py-2 text-sm font-medium transition-colors">
-                        About
+                    <a href="/" onclick="event.preventDefault(); navigateToSection('projects');" class="text-neutral hover:text-secondary px-3 py-2 text-sm font-medium transition-colors">
+                        Projects
                     </a>
                     <a href="/" onclick="event.preventDefault(); navigateToSection('contact');" class="btn-secondary text-sm py-2">
                         Contact
@@ -62,10 +62,10 @@
              x-transition:leave-end="opacity-0 scale-95"
              class="md:hidden">
             <div class="px-2 pt-2 pb-3 space-y-1 border-t border-neutral/20" style="background-color: var(--color-navbar);">
-                <a href="/" @click="mobileMenuOpen = false" class="text-neutral hover:text-secondary block px-3 py-2 text-base font-medium transition-colors w-full text-left">Home</a>
-                <a href="/" onclick="event.preventDefault(); navigateToSection('projects');" @click="mobileMenuOpen = false" class="text-neutral hover:text-secondary block px-3 py-2 text-base font-medium transition-colors w-full text-left">Projects</a>
-                <a href="/" onclick="event.preventDefault(); navigateToSection('skills');" @click="mobileMenuOpen = false" class="text-neutral hover:text-secondary block px-3 py-2 text-base font-medium transition-colors w-full text-left">Skills</a>
+                <a href="/" onclick="event.preventDefault(); navigateToSection('hero');" @click="mobileMenuOpen = false" class="text-neutral hover:text-secondary block px-3 py-2 text-base font-medium transition-colors w-full text-left">Home</a>
                 <a href="/" onclick="event.preventDefault(); navigateToSection('about');" @click="mobileMenuOpen = false" class="text-neutral hover:text-secondary block px-3 py-2 text-base font-medium transition-colors w-full text-left">About</a>
+                <a href="/" onclick="event.preventDefault(); navigateToSection('skills');" @click="mobileMenuOpen = false" class="text-neutral hover:text-secondary block px-3 py-2 text-base font-medium transition-colors w-full text-left">Skills</a>
+                <a href="/" onclick="event.preventDefault(); navigateToSection('projects');" @click="mobileMenuOpen = false" class="text-neutral hover:text-secondary block px-3 py-2 text-base font-medium transition-colors w-full text-left">Projects</a>
                 <a href="/" onclick="event.preventDefault(); navigateToSection('contact');" @click="mobileMenuOpen = false" class="text-neutral hover:text-secondary block px-3 py-2 text-base font-medium transition-colors w-full text-left">Contact</a>
             </div>
         </div>

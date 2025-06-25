@@ -9,8 +9,7 @@ import (
 
 // Services bundles all application services
 type Services struct {
-	ProjectService    *ProjectService
-	TechnologyService *TechnologyService
+	ProjectService *ProjectService
 }
 
 // SetupServices initializes and returns all application services with their dependencies
@@ -22,11 +21,9 @@ func SetupServices(cfg *config.Config) (*Services, error) {
 
 	// Create services with repository dependencies
 	projectService := NewProjectService(repos.ProjectRepo, repos.SkillRepo)
-	technologyService := NewTechnologyService(repos.TechnologyRepo)
 
 	return &Services{
-		ProjectService:    projectService,
-		TechnologyService: technologyService,
+		ProjectService: projectService,
 	}, nil
 }
 

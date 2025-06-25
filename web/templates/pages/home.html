@@ -58,10 +58,10 @@
                 <h2 class="text-h2 text-primary mb-6">About Me</h2>
                 <div class="max-w-3xl mx-auto text-left space-y-8">
                     <p class="text-lg text-neutral leading-relaxed">
-                        I specialize in designing distributed systems and microservices that solve complex scalability challenges for modern applications.
+                        I specialise in designing distributed systems and microservices that solve complex scalability challenges for modern applications.
                     </p>
                     <p class="text-lg text-neutral leading-relaxed">
-                        My expertise includes designing event-driven architectures and implementing high-performance APIs that handle thousands of requests per second. I'm passionate about Go, Python and Java ecosystems, distributed consensus algorithms, and building systems that gracefully handle failure.
+                        My experience includes designing event-driven architectures and implementing high-performance APIs that handle thousands of requests per second. I'm passionate about Go, Python and Java ecosystems, distributed consensus algorithms, database optimisations, and building systems that gracefully handle failure.
                     </p>
                     <p class="text-lg text-neutral leading-relaxed">
                         When I'm not coding, you'll find me making music, playing guitar and piano, or singing. I've found that music and technology both require creativity, precision, and a deep understanding of complex systems.
@@ -107,50 +107,103 @@
             </div>
 
             <!-- Projects Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="projects-grid">
-                {{range .FeaturedProjects}}
-                <article class="card group relative">
-                    <div class="h-full">
-                        <div class="flex justify-between items-start mb-6">
-                            <h3 class="text-xl font-semibold text-primary group-hover:text-secondary transition-colors pr-4">
-                                {{.Title}}
-                            </h3>
-                            <div class="flex space-x-2">
-                                {{if .LiveURL}}
-                                <a href="{{.LiveURL}}" target="_blank" rel="noopener noreferrer"
-                                   class="text-accent hover:text-accent/80 transition-colors"
-                                   title="Live Demo">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                                    </svg>
-                                </a>
+            <div class="space-y-8">
+                <!-- First two projects side by side on larger screens -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {{range $index, $project := .FeaturedProjects}}
+                    {{if lt $index 2}}
+                    <article class="card group relative">
+                        <div class="h-full">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-xl font-semibold text-primary group-hover:text-secondary transition-colors pr-4">
+                                    {{$project.Title}}
+                                </h3>
+                                <div class="flex space-x-2">
+                                    {{if $project.LiveURL}}
+                                    <a href="{{$project.LiveURL}}" target="_blank" rel="noopener noreferrer"
+                                       class="text-accent hover:text-accent/80 transition-colors"
+                                       title="Live Demo">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                        </svg>
+                                    </a>
+                                    {{end}}
+                                    <a href="{{$project.GitHubURL}}" target="_blank" rel="noopener noreferrer"
+                                       class="text-neutral hover:text-secondary transition-colors"
+                                       title="View on GitHub">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                            <p class="text-neutral mb-6 leading-relaxed">{{$project.Description}}</p>
+                            <div class="flex flex-wrap gap-2">
+                                {{range $project.Technologies}}
+                                <span class="tech-badge-with-icon">
+                                    <span class="tech-icon">
+                                        <img src="{{.Icon}}" alt="{{.Name}}" loading="lazy">
+                                    </span>
+                                    <span>{{.Name}}</span>
+                                </span>
                                 {{end}}
-                                <a href="{{.GitHubURL}}" target="_blank" rel="noopener noreferrer"
-                                   class="text-neutral hover:text-secondary transition-colors"
-                                   title="View on GitHub">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                                    </svg>
-                                </a>
                             </div>
                         </div>
-                        <p class="text-neutral mb-6 leading-relaxed">{{.Description}}</p>
-                        <div class="flex flex-wrap gap-2">
-                            {{range .Technologies}}
-                            <span class="tech-badge-with-icon">
-                                <span class="tech-icon">
-                                    <img src="{{.Icon}}" alt="{{.Name}}" loading="lazy">
-                                </span>
-                                <span>{{.Name}}</span>
-                            </span>
-                            {{end}}
-                        </div>
+                    </article>
+                    {{end}}
+                    {{end}}
+                </div>
+                
+                <!-- Third project centered -->
+                {{range $index, $project := .FeaturedProjects}}
+                {{if eq $index 2}}
+                <div class="flex justify-center">
+                    <div class="w-full md:w-1/2">
+                        <article class="card group relative">
+                            <div class="h-full">
+                                <div class="flex justify-between items-start mb-6">
+                                    <h3 class="text-xl font-semibold text-primary group-hover:text-secondary transition-colors pr-4">
+                                        {{$project.Title}}
+                                    </h3>
+                                    <div class="flex space-x-2">
+                                        {{if $project.LiveURL}}
+                                        <a href="{{$project.LiveURL}}" target="_blank" rel="noopener noreferrer"
+                                           class="text-accent hover:text-accent/80 transition-colors"
+                                           title="Live Demo">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                            </svg>
+                                        </a>
+                                        {{end}}
+                                        <a href="{{$project.GitHubURL}}" target="_blank" rel="noopener noreferrer"
+                                           class="text-neutral hover:text-secondary transition-colors"
+                                           title="View on GitHub">
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                                <p class="text-neutral mb-6 leading-relaxed">{{$project.Description}}</p>
+                                <div class="flex flex-wrap gap-2">
+                                    {{range $project.Technologies}}
+                                    <span class="tech-badge-with-icon">
+                                        <span class="tech-icon">
+                                            <img src="{{.Icon}}" alt="{{.Name}}" loading="lazy">
+                                        </span>
+                                        <span>{{.Name}}</span>
+                                    </span>
+                                    {{end}}
+                                </div>
+                            </div>
+                        </article>
                     </div>
-                </article>
+                </div>
+                {{end}}
                 {{end}}
             </div>
 
-            <div class="flex justify-center mt-12">
+            <div class="flex justify-center mt-20">
                 <button @click="animatedScrollToContact()"
                         class="inline-flex items-center justify-center px-8 py-4 border-2 border-secondary/30 text-secondary font-medium rounded-lg hover:border-secondary transition-all duration-300">
                     Let's Discuss Your Project

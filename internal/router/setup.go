@@ -9,7 +9,6 @@ import (
 	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
-	"github.com/russross/blackfriday/v2"
 
 	"github.com/benidevo/website/internal/config"
 	"github.com/benidevo/website/internal/handlers"
@@ -21,34 +20,8 @@ func createMultiTemplateRenderer() multitemplate.Renderer {
 
 	// Set up template functions
 	funcMap := template.FuncMap{
-		"add": func(a, b int) int {
-			return a + b
-		},
-		"sub": func(a, b int) int {
-			return a - b
-		},
-		"slice": func(items interface{}, start, end int) interface{} {
-			switch v := items.(type) {
-			case []string:
-				if start >= len(v) {
-					return []string{}
-				}
-				if end > len(v) {
-					end = len(v)
-				}
-				return v[start:end]
-			}
-			return items
-		},
 		"eq": func(a, b interface{}) bool {
 			return a == b
-		},
-		"markdown": func(text string) template.HTML {
-			html := blackfriday.Run([]byte(text))
-			return template.HTML(html)
-		},
-		"safeHTML": func(text string) template.HTML {
-			return template.HTML(text)
 		},
 	}
 

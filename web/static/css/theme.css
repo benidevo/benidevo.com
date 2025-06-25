@@ -218,13 +218,6 @@
     }
   }
   
-  .tech-badge {
-    @apply inline-flex items-center px-4 py-2 rounded-full text-sm font-medium;
-    background: linear-gradient(135deg, var(--color-secondary), var(--color-accent));
-    color: white;
-    font-size: var(--text-sm);
-    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.12);
-  }
   
   /* Tech badges with icons and names for project cards */
   .tech-badge-with-icon {
@@ -292,70 +285,11 @@
     filter: grayscale(0);
   }
   
-  .skill-badge {
-    @apply inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium;
-    background-color: var(--color-surface);
-    color: var(--color-primary);
-    border: 1px solid rgba(51, 65, 85, 0.08);
-    box-shadow: var(--shadow-sm);
-    transition: var(--transition-normal);
-  }
-  
-  .skill-badge:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
-    border-color: rgba(59, 130, 246, 0.15);
-    background-color: rgba(59, 130, 246, 0.02);
-  }
-  
-  .skill-badge-enhanced {
-    @apply inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4 rounded-xl text-sm font-medium;
-    background: linear-gradient(135deg, var(--color-surface) 0%, rgba(59, 130, 246, 0.02) 100%);
-    color: var(--color-primary);
-    border: 1px solid rgba(51, 65, 85, 0.08);
-    box-shadow: var(--shadow-md);
-    transition: var(--transition-normal);
-    position: relative;
-    overflow: hidden;
-    min-width: 100px;
-  }
-  
-  @media (min-width: 640px) {
-    .skill-badge-enhanced {
-      min-width: 120px;
-    }
-  }
-  
-  .skill-badge-enhanced::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
-    transition: left 0.5s ease;
-  }
-  
-  .skill-badge-enhanced:hover::before {
-    left: 100%;
-  }
-  
-  .skill-badge-enhanced:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: var(--shadow-lg);
-    border-color: rgba(59, 130, 246, 0.2);
-  }
   
   .skill-icon {
     @apply flex items-center justify-center w-6 h-6 text-lg;
     filter: grayscale(0.3);
     transition: var(--transition-normal);
-  }
-  
-  .skill-badge-enhanced:hover .skill-icon {
-    filter: grayscale(0);
-    transform: scale(1.1);
   }
   
   /* Clean skill badges without background for tech stack section */

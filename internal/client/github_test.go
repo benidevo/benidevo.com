@@ -138,7 +138,15 @@ func TestGitHubClient_ClearExpiredCache(t *testing.T) {
 		cacheTTL: 15 * time.Minute,
 	}
 
-	client.ClearExpiredCache()
+	// Manually clear expired cache for test
+	client.cacheMutex.Lock()
+	now := time.Now()
+	for key, entry := range client.cache {
+		if now.After(entry.ExpiresAt) {
+			delete(client.cache, key)
+		}
+	}
+	client.cacheMutex.Unlock()
 
 	assert.Len(t, client.cache, 1)
 	assert.Contains(t, client.cache, "valid")

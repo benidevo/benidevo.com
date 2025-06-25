@@ -31,7 +31,6 @@ func (h *HomeHandler) HomePage(c *gin.Context) {
 	skillCategories := h.projectService.GetSkillCategories()
 
 	data := models.HomePageData{
-		Title:            "Benjamin Idewor | Software Engineer",
 		Description:      "Software Engineer specializing in Distributed Systems, Microservices, and Scalable Architecture.",
 		CanonicalURL:     c.Request.URL.String(),
 		CurrentYear:      time.Now().Year(),
