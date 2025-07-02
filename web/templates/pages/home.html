@@ -13,8 +13,7 @@
                     <h1 class="text-h1 text-primary mb-6 animate-fade-in">
                         Software Engineer
                     </h1>
-                    <p class="text-xl text-neutral mb-8 max-w-2xl animate-slide-up">
-                        I design and build high-performance systems that handle millions of requests with almost zero downtime.
+                    <p class="text-xl text-neutral mb-8 max-w-2xl animate-slide-up">I build systems that stay reliable under unpredictable traffic patterns.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-slide-up">
                         <button @click="scrollToSection('projects')" class="btn-primary">
@@ -58,13 +57,17 @@
                 <h2 class="text-h2 text-primary mb-6">About Me</h2>
                 <div class="max-w-3xl mx-auto text-left space-y-8">
                     <p class="text-lg text-neutral leading-relaxed">
-                        I specialise in designing distributed systems and microservices that solve complex scalability challenges for modern applications.
+                        I specialize in backend engineering with a focus on distributed systems architecture. My work involves designing
+                        event-driven systems, implementing caching strategies that reduce database load, and building APIs that can scale
+                        horizontally. I spend time on problems like distributed consensus, database query optimization, and system
+                        observability. I work primarily in Go and Python ecosystems, with experience in Redis, PostgreSQL, Apache Kafka,
+                        and container orchestration with Kubernetes.
                     </p>
                     <p class="text-lg text-neutral leading-relaxed">
-                        My experience includes designing event-driven architectures and implementing high-performance APIs that handle thousands of requests per second. I'm passionate about Go, Python and Java ecosystems, distributed consensus algorithms, database optimisations, and building systems that gracefully handle failure.
-                    </p>
-                    <p class="text-lg text-neutral leading-relaxed">
-                        When I'm not coding, you'll find me making music, playing guitar and piano, or singing. I've found that music and technology both require creativity, precision, and a deep understanding of complex systems.
+                        When I'm not coding, I'm usually playing guitar or piano. I've been making music for years, and there's
+                        something interesting about how both music and distributed systems involve timing, coordination, and managing
+                        complexity. Whether it's debugging a race condition or working through a tricky chord progression, both require patience
+                        and listening for patterns.
                     </p>
                 </div>
             </div>
@@ -153,7 +156,7 @@
                     {{end}}
                     {{end}}
                 </div>
-                
+
                 <!-- Third project centered -->
                 {{range $index, $project := .FeaturedProjects}}
                 {{if eq $index 2}}
@@ -215,9 +218,9 @@
     <!-- Contact Section -->
     <section id="contact" class="pt-20 pb-16 text-white" style="background-color: var(--color-footer);">
         <div class="max-w-4xl mx-auto px-6 sm:px-8 lg:px-12 text-center">
-            <h2 class="text-h2 text-gray-300 mb-6">Facing Scale Challenges?</h2>
+            <h2 class="text-h2 text-gray-300 mb-6">Building something that needs to scale reliably?</h2>
             <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                Tell me about your project and let's find a solution.
+                I'd be happy to discuss your technical challenges.
             </p>
             <div class="flex justify-center">
                 <a href="mailto:benjaminidewor@gmail.com"
