@@ -75,24 +75,61 @@
     </section>
 
     <!-- Tech Stack Section -->
-    <section id="skills" class="py-16 bg-background">
-        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div class="text-center mb-12">
-                <h2 class="text-h2 text-primary mb-6">Tech Stack</h2>
+    <section id="skills" class="py-12 bg-background" x-data="{ expanded: false }">
+        <div class="max-w-4xl mx-auto px-6 sm:px-8 lg:px-12">
+            <div class="text-center mb-8">
+                <h2 class="text-h2 text-primary">Tech Stack</h2>
             </div>
 
-            <!-- Skills Categories -->
-            <div class="space-y-12">
+            <!-- Core Skills - Always Visible -->
+            <div class="flex flex-wrap justify-center gap-4 mb-6 animate-fade-in">
+                <!-- Display first 2-3 skills from each category for a balanced mix -->
+                {{range .SkillCategories}}
+                    {{range $index, $skill := .Skills}}
+                        {{if lt $index 2}}{{/* Take first 2 from each category */}}
+                            <div class="skill-badge-compact group">
+                                <div class="skill-icon-compact">
+                                    <img src="{{$skill.Icon}}" alt="{{$skill.Name}}" loading="lazy">
+                                </div>
+                                <span class="skill-name">{{$skill.Name}}</span>
+                            </div>
+                        {{end}}
+                    {{end}}
+                {{end}}
+            </div>
+
+            <!-- Expand/Collapse Button -->
+            <div class="flex justify-center mb-6">
+                <button @click="expanded = !expanded" 
+                        class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-secondary hover:text-secondary/80 transition-colors">
+                    <span x-text="expanded ? 'Show Less' : 'View All Skills'"></span>
+                    <svg class="w-4 h-4 transition-transform duration-200" 
+                         :class="expanded ? 'rotate-180' : ''"
+                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Expanded Skills - Hidden by Default -->
+            <div x-show="expanded" 
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0 transform -translate-y-4"
+                 x-transition:enter-end="opacity-100 transform translate-y-0"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100 transform translate-y-0"
+                 x-transition:leave-end="opacity-0 transform -translate-y-4"
+                 class="space-y-8">
                 {{range .SkillCategories}}
                 <div class="text-center">
-                    <h3 class="text-lg font-semibold text-primary mb-6">{{.Category}}</h3>
-                    <div class="flex flex-wrap justify-center gap-3 animate-fade-in">
+                    <h3 class="text-sm font-semibold text-primary/80 uppercase tracking-wider mb-4">{{.Category}}</h3>
+                    <div class="flex flex-wrap justify-center gap-3">
                         {{range .Skills}}
-                        <div class="skill-badge-clean">
-                            <div class="skill-icon">
+                        <div class="skill-badge-expanded">
+                            <div class="skill-icon-small">
                                 <img src="{{.Icon}}" alt="{{.Name}}" loading="lazy">
                             </div>
-                            <span>{{.Name}}</span>
+                            <span class="text-sm">{{.Name}}</span>
                         </div>
                         {{end}}
                     </div>
